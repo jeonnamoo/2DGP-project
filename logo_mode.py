@@ -24,7 +24,10 @@ def update():
 
 def draw():
     clear_canvas()
-    image.draw(400, 300)
+    # 현재 캔버스 크기 가져오기
+    canvas_width, canvas_height = 1440, 960  # 캔버스 크기를 명시적으로 설정해주거나 자동으로 가져와야 함
+    # 이미지의 너비와 높이를 캔버스 크기에 맞게 조정하여 그리기
+    image.draw_to_origin(0, 0, canvas_width, canvas_height)
     update_canvas()
 
 def handle_events():
