@@ -1,8 +1,8 @@
 from pico2d import *
 
 import game_world
-from yard import Grass
-from boy import Boy
+from yard import Yard
+from girl import Girl
 
 
 def handle_events():
@@ -15,20 +15,20 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
         else:
-            boy.handle_event(event)
+            girl.handle_event(event)
 
 
 def reset_world():
     global running
-    global boy
+    global girl
 
     running = True
 
-    grass = Grass()
-    game_world.add_object(grass, 0)
+    yard = Yard()
+    game_world.add_object(yard, 0)
 
-    boy = Boy()
-    game_world.add_object(boy, 1)
+    girl = Girl()
+    game_world.add_object(girl, 1)
 
 
 open_canvas()

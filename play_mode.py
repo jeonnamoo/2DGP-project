@@ -5,7 +5,7 @@ import game_world
 import item_mode
 import title_mode
 from yard import Yard
-from boy import Boy
+from girl import Girl
 
 
 def handle_events():
@@ -18,19 +18,19 @@ def handle_events():
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_i):
             game_framework.push_mode(item_mode)
         else:
-            boy.handle_event(event)
+            girl.handle_event(event)
 
 
 def init():
-    global boy
+    global girl
 
     running = True
 
     yard = Yard()
     game_world.add_object(yard, 0)
 
-    boy = Boy()
-    game_world.add_object(boy, 1)
+    girl = Girl()
+    game_world.add_object(girl, 1)
 
 def finish():
     game_world.clear()

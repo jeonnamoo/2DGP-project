@@ -23,11 +23,11 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.pop_mode()
         elif(event.type, event.key) == (SDL_KEYDOWN, SDLK_0):
-            play_mode.boy.set_item('None')
+            play_mode.girl.set_item('None')
         elif(event.type, event.key) == (SDL_KEYDOWN, SDLK_1):
-            play_mode.boy.set_item('SmallBall')
+            play_mode.girl.set_item('SmallBall')
         elif(event.type, event.key) == (SDL_KEYDOWN, SDLK_2):
-            play_mode.boy.set_item('BigBall')
+            play_mode.girl.set_item('BigBall')
 
 def draw():
     clear_canvas()
