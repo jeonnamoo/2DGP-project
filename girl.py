@@ -103,7 +103,7 @@ class Girl:
     def __init__(self):
         self.x, self.y = 400, 90
         self.face_dir = 1
-        self.image = load_image('animation_sheet.png')
+        self.image = load_image('animation_sheet1.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
