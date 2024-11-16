@@ -9,7 +9,6 @@ running = True
 girl = None
 door = None
 
-
 def handle_events():
     global running
 
@@ -22,7 +21,6 @@ def handle_events():
         else:
             girl.handle_event(event)
 
-
 def reset_world():
     global girl, door
 
@@ -30,21 +28,20 @@ def reset_world():
 
     # 배경 추가
     yard = Yard()
-    game_world.add_object(yard, 0)  # 배경 레이어 (0)
+    game_world.add_object(yard, 0)  # 레이어 0: 배경
 
-    # Door 추가
-    door = Door(x=740, y=610)  # 문 위치를 조정하여 정확히 배치
-    game_world.add_object(door, 1)  # Door는 1번 레이어에 배치
+    # 문 추가 - 배경이 존재할 때 항상 추가됩니다.
+    door = Door(x=740, y=610)  # 문 위치 설정
+    game_world.add_object(door, 1)  # 레이어 1: 문
 
-    # Girl 추가
+    # 캐릭터 추가
     girl = Girl()
-    game_world.add_object(girl, 2)  # Girl은 2번 레이어에 배치
-
+    game_world.add_object(girl, 2)  # 레이어 2: 캐릭터
 
 open_canvas(1440, 960)
 reset_world()
 
-# game loop
+# 게임 루프
 while running:
     handle_events()
     game_world.update()
@@ -53,5 +50,5 @@ while running:
     update_canvas()
     delay(0.01)
 
-# finalization code
+# 종료 코드
 close_canvas()
