@@ -1,7 +1,6 @@
 from pico2d import get_time, load_image, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, SDLK_UP, SDLK_DOWN
-
-from door import Door
 from state_machine import *
+from tool import Broom, Duster, Mop
 import game_world
 from yard import Yard
 
@@ -77,45 +76,42 @@ class Run:
         girl.image.clip_draw(girl.frame * 16, girl.action * 32, 16, 32, girl.x, girl.y, 48, 96)
 
 
-
 class Girl:
     def __init__(self):
-        self.x, self.y = 720, 480
-        self.dir_x, self.dir_y = 0, 0
-        self.action = 0
-        self.frame = 0
-        self.image = load_image('animation_sheet1.png')
+        self.x, self.y = 720, 480  # 초기 위치
+        self.dir_x, self.dir_y = 0, 0  # 이동 방향
+        self.face_dir = 0  # 캐릭터가 바라보는 방향
+        self.action = 0  # 현재 상태 (0: 아래, 1: 오른쪽, 2: 위, 3: 왼쪽)
+        self.frame = 0  # 애니메이션 프레임
+        self.image = load_image('animation_sheet1.png')  # 스프라이트 시트 로드
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
-        self.state_machine.set_transitions({
-            Idle: {bottom_down: Run, right_down: Run, top_down: Run, left_down: Run},
-            Run: {bottom_up: Idle, right_up: Idle, top_up: Idle, left_up: Idle},
-        })
+        self.state_machine.set_transitions(
+            {
+                Idle: {bottom_down: Run, right_down: Run, top_down: Run, left_down: Run},
+                Run: {bottom_up: Idle, right_up: Idle, top_up: Idle, left_up: Idle},
+            }
+        )
+        self.set_item('NONE')
 
     def update(self):
         self.state_machine.update()
-        # 충돌 체크
-        for obj in game_world.world[1]:  # Door가 1번 레이어에 있으므로
-            if isinstance(obj, Door) and self.check_collision(obj):
-                print("Collision with Door!")
-                self.x -= self.dir_x * 2  # 충돌 시 이동 되돌림
-                self.y -= self.dir_y * 2
-
-    def check_collision(self, other):
-        # 충돌 판정 (AABB 방식)
-        left1, bottom1, right1, top1 = self.get_bb()
-        left2, bottom2, right2, top2 = other.get_bb()
-        if left1 > right2 or right1 < left2 or top1 < bottom2 or bottom1 > top2:
-            return False
-        return True
 
     def handle_event(self, event):
+        # 이벤트 추가
         self.state_machine.add_event(('INPUT', event))
 
     def draw(self):
         self.state_machine.draw()
 
-    def get_bb(self):
-        # 캐릭터 Bounding Box
-        return self.x - 16, self.y - 32, self.x + 16, self.y + 32
+    def set_item(self, item):
+        self.item = item
 
+    def get_bb(self):
+        # 충돌 판정을 위한 Bounding Box 반환
+        return self.x - 20, self.y - 50, self.x + 20, self.y + 50
+
+    def handle_collision(self, group, other):
+        # 충돌 시 동작 정의
+        if group == 'Door:door':
+            pass
