@@ -1,23 +1,20 @@
 from pico2d import *
-from door import Door
+import game_world
 
 class Yard:
     def __init__(self):
-        self.image = load_image('yard.png')  # 배경 이미지
-        self.door = Door(width=32, height=32)  # 문 크기 설정
-        self.x, self.y = 720, 480  # Yard 중심 좌표
-        self.width, self.height = 1440, 960  # Yard 크기
-        self.door_x, self.door_y = 720, 550  # 문 위치
+        self.image = load_image('yard.png')
+        self.x, self.y = 720, 480
+        self.width, self.height = 1440, 960
+        self.door_bb = (720 - 32, 500 - 64, 720 + 32, 500 + 64)  # Door Bounding Box
 
     def draw(self):
-        # 배경 그리기
         self.image.draw_to_origin(0, 0, self.width, self.height)
-        # 문 그리기
-        self.door.draw(self.door_x, self.door_y)
+        # Door의 Bounding Box 그리기 (디버깅용)
+        draw_rectangle(*self.door_bb)
 
     def update(self):
         pass
 
     def get_door_bb(self):
-        # 문의 Bounding Box 반환
-        return self.door.get_bb(self.door_x, self.door_y)
+        return self.door_bb
