@@ -9,7 +9,7 @@ class Idle:
     def enter(girl, e):
         # Idle 상태에 진입했을 때 초기화
         girl.dir_x, girl.dir_y = 0, 0  # 멈춤
-        girl.action = 0  # Idle 상태는 첫 번째 줄
+        girl.action = 0  # Idle 상태는 첫 번째 줄 (아래 방향)
         girl.frame = 0  # 애니메이션 없음
 
     @staticmethod
@@ -25,25 +25,25 @@ class Idle:
     @staticmethod
     def draw(girl):
         # Idle 상태에서는 고정된 한 프레임만 출력
-        girl.image.clip_draw(0, girl.action * 32, 16, 32, girl.x, girl.y, 64, 128)  # 확대하여 그리기
+        girl.image.clip_draw(0, girl.action * 32, 16, 32, girl.x, girl.y, 48, 96)  # 살짝 줄인 크기로 그리기
 
 
 class Run:
     @staticmethod
     def enter(girl, e):
         # Run 상태에 진입했을 때 방향 및 애니메이션 초기화
-        if bottom_down(e):
-            girl.dir_x, girl.dir_y = 0, -1
-            girl.action = 0  # 아래쪽
-        elif right_down(e):
-            girl.dir_x, girl.dir_y = 1, 0
-            girl.action = 1  # 오른쪽
-        elif top_down(e):
+        if bottom_down(e):  # 아래 방향
             girl.dir_x, girl.dir_y = 0, 1
-            girl.action = 2  # 위쪽
-        elif left_down(e):
+            girl.action = 3  # 아래쪽
+        elif right_down(e):  # 오른쪽 방향
+            girl.dir_x, girl.dir_y = 1, 0
+            girl.action = 2  # 오른쪽
+        elif top_down(e):  # 위 방향
+            girl.dir_x, girl.dir_y = 0, -1
+            girl.action = 1  # 위쪽
+        elif left_down(e):  # 왼쪽 방향
             girl.dir_x, girl.dir_y = -1, 0
-            girl.action = 3  # 왼쪽
+            girl.action = 0  # 왼쪽
 
     @staticmethod
     def exit(girl, e):
@@ -54,13 +54,13 @@ class Run:
     def do(girl):
         # Run 상태에서만 애니메이션 작동 및 이동 처리
         girl.frame = (girl.frame + 1) % 4  # 4개의 프레임 순환
-        girl.x += girl.dir_x * 2  # 속도를 줄임
-        girl.y += girl.dir_y * 2  # 상하 이동 추가
+        girl.x += girl.dir_x * 2  # X축 이동
+        girl.y += girl.dir_y * 2  # Y축 이동 (위: +, 아래: -)
 
     @staticmethod
     def draw(girl):
-        # Run 상태에서는 애니메이션 프레임 순환, 확대하여 그리기
-        girl.image.clip_draw(girl.frame * 16, girl.action * 32, 16, 32, girl.x, girl.y, 64, 128)
+        # Run 상태에서는 애니메이션 프레임 순환, 살짝 줄인 크기로 그리기
+        girl.image.clip_draw(girl.frame * 16, girl.action * 32, 16, 32, girl.x, girl.y, 48, 96)
 
 
 class Girl:
