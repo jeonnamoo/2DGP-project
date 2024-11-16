@@ -1,7 +1,7 @@
 from pico2d import get_time, load_image, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, SDLK_UP, SDLK_DOWN
 from state_machine import *
-from tool import Broom, Duster, Mop
 import game_world
+from yard import Yard
 
 
 class Idle:
@@ -63,7 +63,8 @@ class Run:
         girl.frame = (girl.frame + 1) % 4  # 4개의 프레임 순환
         girl.x += girl.dir_x * 2  # X축 이동
         girl.y += girl.dir_y * 2  # Y축 이동 (위: +, 아래: -)
-        girl.x = max(50, min(750, girl.x))
+        girl.x = max(50, min(1440, girl.x))
+        girl.y = max(50, min(960, girl.y) )
 
     @staticmethod
     def draw(girl):
@@ -71,43 +72,29 @@ class Run:
         girl.image.clip_draw(girl.frame * 16, girl.action * 32, 16, 32, girl.x, girl.y, 48, 96)
 
 
+
 class Girl:
     def __init__(self):
-        self.x, self.y = 720, 480  # 초기 위치
-        self.dir_x, self.dir_y = 0, 0  # 이동 방향
-        self.face_dir = 0  # 캐릭터가 바라보는 방향
-        self.action = 0  # 현재 상태 (0: 아래, 1: 오른쪽, 2: 위, 3: 왼쪽)
-        self.frame = 0  # 애니메이션 프레임
-        self.image = load_image('animation_sheet1.png')  # 스프라이트 시트 로드
+        self.x, self.y = 720, 480
+        self.dir_x, self.dir_y = 0, 0
+        self.action = 0
+        self.frame = 0
+        self.image = load_image('animation_sheet1.png')
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
-        self.state_machine.set_transitions(
-            {
-                Idle: {bottom_down: Run, right_down: Run, top_down: Run, left_down: Run},
-                Run: {bottom_up: Idle, right_up: Idle, top_up: Idle, left_up: Idle},
-            }
-        )
-        self.set_item('NONE')
+        self.state_machine.set_transitions({
+            Idle: {bottom_down: Run, right_down: Run, top_down: Run, left_down: Run},
+            Run: {bottom_up: Idle, right_up: Idle, top_up: Idle, left_up: Idle},
+        })
 
     def update(self):
         self.state_machine.update()
 
     def handle_event(self, event):
-        # 이벤트 추가
         self.state_machine.add_event(('INPUT', event))
 
     def draw(self):
         self.state_machine.draw()
 
-    def set_item(self, item):
-        self.item = item
-
     def get_bb(self):
-        # 충돌 판정을 위한 Bounding Box 반환
         return self.x - 20, self.y - 50, self.x + 20, self.y + 50
-
-    def handle_collision(self, group, other):
-        # 충돌 시 동작 정의
-        if group == 'Door:door':
-            pass
-

@@ -9,6 +9,7 @@ running = True
 girl = None
 door = None
 
+
 def handle_events():
     global running
 
@@ -21,6 +22,7 @@ def handle_events():
         else:
             girl.handle_event(event)
 
+
 def reset_world():
     global girl, door
 
@@ -30,13 +32,24 @@ def reset_world():
     yard = Yard()
     game_world.add_object(yard, 0)  # 레이어 0: 배경
 
-    # 문 추가 - 배경이 존재할 때 항상 추가됩니다.
-    door = Door(x=740, y=610)  # 문 위치 설정
+    # 문 추가
+    door = Door(x=740, y=610)
     game_world.add_object(door, 1)  # 레이어 1: 문
 
     # 캐릭터 추가
     girl = Girl()
     game_world.add_object(girl, 2)  # 레이어 2: 캐릭터
+
+
+def check_collision(obj1, obj2):
+    # 충돌 판정 함수 (AABB 방식)
+    left1, bottom1, right1, top1 = obj1.get_bb()
+    left2, bottom2, right2, top2 = obj2.get_bb()
+
+    if left1 > right2 or right1 < left2 or top1 < bottom2 or bottom1 > top2:
+        return False
+    return True
+
 
 open_canvas(1440, 960)
 reset_world()
@@ -45,6 +58,11 @@ reset_world()
 while running:
     handle_events()
     game_world.update()
+
+    # 충돌 판정
+    if check_collision(girl, door):
+        print("Collision with Door!")
+
     clear_canvas()
     game_world.render()
     update_canvas()
