@@ -3,9 +3,11 @@ from pico2d import *
 import game_world
 from yard import Yard
 from girl import Girl
+from door import Door
 
 running = True
 girl = None
+door = None
 
 
 def handle_events():
@@ -22,15 +24,18 @@ def handle_events():
 
 
 def reset_world():
-    global girl
+    global girl, door
 
     game_world.clear()
 
     yard = Yard()
-    game_world.add_object(yard, 0)
+    game_world.add_object(yard, 0)  # 배경 레이어 (0)
+
+    door = Door(x=720, y=480)  # Door 위치 설정
+    game_world.add_object(door, 1)  # Door 레이어 (1)
 
     girl = Girl()
-    game_world.add_object(girl, 1)
+    game_world.add_object(girl, 2)  # Girl 레이어 (2)
 
 
 open_canvas(1440, 960)
