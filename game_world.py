@@ -4,6 +4,8 @@ world = [[], [], [], []]  # 레이어: 0 = 배경, 1 = Door, 2 = 캐릭터, 3 = 
 def add_object(o, depth=0):
     if 0 <= depth < len(world):
         world[depth].append(o)
+    else:
+        raise ValueError(f"Invalid depth {depth}: Object not added to any layer.")
 
 
 def update():

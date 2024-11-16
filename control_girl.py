@@ -28,14 +28,17 @@ def reset_world():
 
     game_world.clear()
 
+    # 배경 추가
     yard = Yard()
     game_world.add_object(yard, 0)  # 배경 레이어 (0)
 
-    door = Door(x=720, y=480)  # Door 위치 설정
-    game_world.add_object(door, 1)  # Door 레이어 (1)
+    # Door 추가
+    door = Door(x=740, y=610)  # 문 위치를 조정하여 정확히 배치
+    game_world.add_object(door, 1)  # Door는 1번 레이어에 배치
 
+    # Girl 추가
     girl = Girl()
-    game_world.add_object(girl, 2)  # Girl 레이어 (2)
+    game_world.add_object(girl, 2)  # Girl은 2번 레이어에 배치
 
 
 open_canvas(1440, 960)
