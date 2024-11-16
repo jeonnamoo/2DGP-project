@@ -1,6 +1,6 @@
 from pico2d import get_time, load_image, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, SDLK_UP, SDLK_DOWN
 from state_machine import *
-from tool import Ball, BigBall
+from tool import Broom, Duster, Mop
 import game_world
 
 
@@ -102,10 +102,14 @@ class Girl:
         self.item = item
 
     def fire_ball(self):
-        if self.item == 'SmallBall':
-            ball = Ball(self.x, self.y, self.face_dir * 10)
-            game_world.add_object(ball)
+        if self.item == 'Broom':
+            ball = Broom(self.x, self.y, self.face_dir * 10)
+            game_world.add_object(broom)
 
-        elif self.item == 'BigBall':
+        elif self.item == 'Mop':
             ball = BigBall(self.x, self.y, self.face_dir * 10)
-            game_world.add_object(ball)
+            game_world.add_object(mop)
+
+        elif self.item == 'Duster':
+            ball = BigBall(self.x, self.y, self.face_dir * 10)
+            game_world.add_object(duster)

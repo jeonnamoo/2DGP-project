@@ -1,12 +1,12 @@
 from pico2d import *
 import game_world
 
-class Tool:
+class Broom:
     image = None
 
     def __init__(self, x = 400, y = 300, velocity = 1):
-        if Tool.image == None:
-            Tool.image = load_image('ball21x21.png')
+        if Broom.image == None:
+            Broom.image = load_image('broom.png')
         self.x, self.y, self.velocity = x, y, velocity
 
     def draw(self):
@@ -18,12 +18,29 @@ class Tool:
         if self.x < 25 or self.x > 800 - 25:
             game_world.remove_object(self)
 
-class BigBall:
+class Mop:
     image = None
 
     def __init__(self, x = 400, y = 300, velocity = 1):
-        if BigBall.image == None:
-            BigBall.image = load_image('ball41x41.png')
+        if Mop.image == None:
+            Mop.image = load_image('mop.png')
+        self.x, self.y, self.velocity = x, y, velocity
+
+    def draw(self):
+        self.image.draw(self.x, self.y)
+
+    def update(self):
+        self.x += self.velocity
+
+        if self.x < 25 or self.x > 800 - 25:
+            game_world.remove_object(self)
+
+class Duster:
+    image = None
+
+    def __init__(self, x = 400, y = 300, velocity = 1):
+        if Duster.image == None:
+            Duster.image = load_image('duster.png')
         self.x, self.y, self.velocity = x, y, velocity
 
     def draw(self):
