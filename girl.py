@@ -63,8 +63,11 @@ class Run:
         girl.frame = (girl.frame + 1) % 4  # 4개의 프레임 순환
         girl.x += girl.dir_x * 2  # X축 이동
         girl.y += girl.dir_y * 2  # Y축 이동 (위: +, 아래: -)
-        girl.x = max(50, min(1440, girl.x))
-        girl.y = max(50, min(960, girl.y) )
+
+        yard = game_world.get_object_by_class(Yard)
+        if yard:
+            girl.x = max(50, min(1390, girl.x))
+            girl.y = max(100, min(880, girl.y) )
 
     @staticmethod
     def draw(girl):
