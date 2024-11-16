@@ -1,4 +1,6 @@
 from pico2d import get_time, load_image, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, SDLK_UP, SDLK_DOWN
+
+from door import Door
 from state_machine import *
 import game_world
 from yard import Yard
@@ -61,8 +63,8 @@ class Run:
     def do(girl):
         # Run 상태에서만 애니메이션 작동 및 이동 처리
         girl.frame = (girl.frame + 1) % 4  # 4개의 프레임 순환
-        girl.x += girl.dir_x * 1  # X축 이동
-        girl.y += girl.dir_y * 1  # Y축 이동 (위: +, 아래: -)
+        girl.x += girl.dir_x * 1.5  # X축 이동
+        girl.y += girl.dir_y * 1.5  # Y축 이동 (위: +, 아래: -)
 
         yard = game_world.get_object_by_class(Yard)
         if yard:
@@ -92,6 +94,20 @@ class Girl:
 
     def update(self):
         self.state_machine.update()
+        # 충돌 체크
+        for obj in game_world.world[1]:  # Door가 1번 레이어에 있으므로
+            if isinstance(obj, Door) and self.check_collision(obj):
+                print("Collision with Door!")
+                self.x -= self.dir_x * 2  # 충돌 시 이동 되돌림
+                self.y -= self.dir_y * 2
+
+    def check_collision(self, other):
+        # 충돌 판정 (AABB 방식)
+        left1, bottom1, right1, top1 = self.get_bb()
+        left2, bottom2, right2, top2 = other.get_bb()
+        if left1 > right2 or right1 < left2 or top1 < bottom2 or bottom1 > top2:
+            return False
+        return True
 
     def handle_event(self, event):
         self.state_machine.add_event(('INPUT', event))
@@ -100,4 +116,6 @@ class Girl:
         self.state_machine.draw()
 
     def get_bb(self):
-        return self.x - 20, self.y - 50, self.x + 20, self.y + 50
+        # 캐릭터 Bounding Box
+        return self.x - 16, self.y - 32, self.x + 16, self.y + 32
+
