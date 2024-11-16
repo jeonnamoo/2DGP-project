@@ -4,6 +4,9 @@ import game_world
 from yard import Yard
 from girl import Girl
 
+running = True
+girl = None
+
 
 def handle_events():
     global running
@@ -19,10 +22,9 @@ def handle_events():
 
 
 def reset_world():
-    global running
     global girl
 
-    running = True
+    game_world.clear()
 
     yard = Yard()
     game_world.add_object(yard, 0)
@@ -31,8 +33,9 @@ def reset_world():
     game_world.add_object(girl, 1)
 
 
-open_canvas()
+open_canvas(1440, 960)
 reset_world()
+
 # game loop
 while running:
     handle_events()
@@ -41,5 +44,6 @@ while running:
     game_world.render()
     update_canvas()
     delay(0.01)
+
 # finalization code
 close_canvas()

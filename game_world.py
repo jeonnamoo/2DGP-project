@@ -1,8 +1,9 @@
-world = [[],[],[],[]]
+world = [[], [], [], []]
 
 
-def add_object(o, depth = 0):
-    world[depth].append(o)
+def add_object(o, depth=0):
+    if 0 <= depth < len(world):
+        world[depth].append(o)
 
 
 def update():
@@ -23,9 +24,9 @@ def remove_object(o):
             layer.remove(o)
             return
 
-    raise ValueError('Cannot delete non existing object')
+    raise ValueError('Cannot delete non-existing object')
+
 
 def clear():
     for layer in world:
         layer.clear()
-
