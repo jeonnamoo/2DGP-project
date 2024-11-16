@@ -1,6 +1,6 @@
 from pico2d import get_time, load_image, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, SDLK_UP, SDLK_DOWN
 from state_machine import *
-from ball import Ball, BigBall
+from tool import Ball, BigBall
 import game_world
 
 
