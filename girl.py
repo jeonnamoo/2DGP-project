@@ -9,8 +9,15 @@ class Idle:
     def enter(girl, e):
         # Idle 상태에 진입했을 때 초기화
         girl.dir_x, girl.dir_y = 0, 0  # 멈춤
-        girl.action = 0  # Idle 상태는 첫 번째 줄 (아래 방향)
         girl.frame = 0  # 애니메이션 없음
+        if e[0] == 'START':  # 게임 시작 시 기본 위치 설정
+            girl.action = 0  # 1행 (아래 방향)
+        elif right_down(e):  # 오른쪽 방향 입력
+            girl.action = 1  # 2행 (오른쪽 방향)
+        elif top_down(e):  # 위쪽 방향 입력
+            girl.action = 2  # 3행 (위쪽 방향)
+        elif left_down(e):  # 왼쪽 방향 입력
+            girl.action = 3  # 4행 (왼쪽 방향)
 
     @staticmethod
     def exit(girl, e):
@@ -34,13 +41,13 @@ class Run:
         # Run 상태에 진입했을 때 방향 및 애니메이션 초기화
         if bottom_down(e):  # 아래 방향
             girl.dir_x, girl.dir_y = 0, 1
-            girl.action = 3  # 아래쪽
+            girl.action = 1  # 아래쪽
         elif right_down(e):  # 오른쪽 방향
             girl.dir_x, girl.dir_y = 1, 0
             girl.action = 2  # 오른쪽
         elif top_down(e):  # 위 방향
             girl.dir_x, girl.dir_y = 0, -1
-            girl.action = 1  # 위쪽
+            girl.action = 3  # 위쪽
         elif left_down(e):  # 왼쪽 방향
             girl.dir_x, girl.dir_y = -1, 0
             girl.action = 0  # 왼쪽
