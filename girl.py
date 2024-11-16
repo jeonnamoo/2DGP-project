@@ -25,25 +25,25 @@ class Idle:
     @staticmethod
     def draw(girl):
         # Idle 상태에서는 고정된 한 프레임만 출력
-        girl.image.clip_draw(0, girl.action * 64, 32, 64, girl.x, girl.y)
+        girl.image.clip_draw(0, girl.action * 32, 16, 32, girl.x, girl.y, 64, 128)  # 확대하여 그리기
 
 
 class Run:
     @staticmethod
     def enter(girl, e):
         # Run 상태에 진입했을 때 방향 및 애니메이션 초기화
-        if right_down(e):
+        if bottom_down(e):
+            girl.dir_x, girl.dir_y = 0, -1
+            girl.action = 0  # 아래쪽
+        elif right_down(e):
             girl.dir_x, girl.dir_y = 1, 0
             girl.action = 1  # 오른쪽
-        elif left_down(e):
-            girl.dir_x, girl.dir_y = -1, 0
-            girl.action = 3  # 왼쪽
         elif top_down(e):
             girl.dir_x, girl.dir_y = 0, 1
             girl.action = 2  # 위쪽
-        elif bottom_down(e):
-            girl.dir_x, girl.dir_y = 0, -1
-            girl.action = 0  # 아래쪽
+        elif left_down(e):
+            girl.dir_x, girl.dir_y = -1, 0
+            girl.action = 3  # 왼쪽
 
     @staticmethod
     def exit(girl, e):
@@ -59,8 +59,8 @@ class Run:
 
     @staticmethod
     def draw(girl):
-        # Run 상태에서는 애니메이션 프레임 순환
-        girl.image.clip_draw(girl.frame * 32, girl.action * 64, 32, 64, girl.x, girl.y)
+        # Run 상태에서는 애니메이션 프레임 순환, 확대하여 그리기
+        girl.image.clip_draw(girl.frame * 16, girl.action * 32, 16, 32, girl.x, girl.y, 64, 128)
 
 
 class Girl:
@@ -68,15 +68,15 @@ class Girl:
         self.x, self.y = 400, 300  # 초기 위치
         self.dir_x, self.dir_y = 0, 0  # 이동 방향
         self.face_dir = 1  # 캐릭터가 바라보는 방향
-        self.action = 0  # 현재 상태 (0: Idle, 1~3: Run 상태)
+        self.action = 0  # 현재 상태 (0: 아래, 1: 오른쪽, 2: 위, 3: 왼쪽)
         self.frame = 0  # 애니메이션 프레임
         self.image = load_image('animation_sheet1.png')  # 스프라이트 시트 로드
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
             {
-                Idle: {right_down: Run, left_down: Run, top_down: Run, bottom_down: Run},
-                Run: {right_up: Idle, left_up: Idle, top_up: Idle, bottom_up: Idle},
+                Idle: {bottom_down: Run, right_down: Run, top_down: Run, left_down: Run},
+                Run: {bottom_up: Idle, right_up: Idle, top_up: Idle, left_up: Idle},
             }
         )
         self.set_item('NONE')
