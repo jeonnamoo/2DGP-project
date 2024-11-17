@@ -14,11 +14,6 @@ class Door:
     def draw(self, x, y):
         # 문 이미지를 크기 조정하여 주어진 위치(x, y)에 그리기
         self.image.draw_to_origin(x - self.width // 2, y - self.height // 2, self.width, self.height)
-        draw_rectangle(*self.get_bb())
 
-    def get_bb(self):
-        return self.x - 10, self.y - 10, self.x + 10, self.y + 10
 
-    def handle_collision(self, group, other):
-        if group == 'girl:door':
-            game_world.remove_object(self)
+

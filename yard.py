@@ -18,6 +18,3 @@ class Yard:
     def update(self):
         pass
 
-    def get_door_bb(self):
-        # 문의 Bounding Box 반환
-        return self.door.get_bb(self.door_x, self.door_y)
