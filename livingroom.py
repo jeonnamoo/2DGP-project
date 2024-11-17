@@ -8,9 +8,11 @@ from girl import Girl
 
 
 image = None
-door = None
+doors = []
 width, height = 1440, 960  # Yard 크기
 girl = None
+
+
 
 def init():
     global image
@@ -43,10 +45,15 @@ def handle_events():
                 girl.handle_event(event)
 
 def update():
+    global girl
+    if girl:
+        girl.x = max(200, min(1240, girl.x))  # x축 이동 범위 제한
+        girl.y = max(150, min(810, girl.y))  # y축 이동 범위 제한
     game_world.update()  # 다른 객체들도 업데이트
 def pause(): pass
 def resume(): pass
 def finish():
     global image
     del image
+    doors.clear()
 
