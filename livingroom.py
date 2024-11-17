@@ -11,7 +11,7 @@ image = None
 door1 = None
 door2 = None
 door1_x, door1_y = 820, 300  # 첫 번째 문 위치
-door2_x, door2_y = 300, 200  # 두 번째 문 위치
+door2_x, door2_y = 410, 160  # 두 번째 문 위치
 width, height = 1440, 960  # Livingroom 크기
 girl = None
 
