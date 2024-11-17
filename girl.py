@@ -66,9 +66,6 @@ class Run:
         girl.y += girl.dir_y * 1.5  # Y축 이동 (위: +, 아래: -)
 
 
-        if yard:
-            girl.x = max(500, min(820, girl.x))
-            girl.y = max(475, min(530, girl.y))
 
     @staticmethod
     def draw(girl):
