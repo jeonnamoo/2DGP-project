@@ -38,7 +38,9 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
-            if 700 <= girl.x <= 740 and 500 <= girl.y <= 600:  # 특정 범위 확인
+            # Girl과 Door 사이의 거리 계산
+            distance = ((girl.x - door_x) ** 2 + (girl.y - door_y) ** 2) ** 0.5
+            if distance <= 30:  # 문 근처(거리 50 이하)일 때만 Livingroom으로 전환
                 game_framework.change_mode(livingroom)
         else:
             if girl:
