@@ -20,8 +20,6 @@ def init():
 
     girl = Girl()
     game_world.add_object(girl, 2)
-    girl.x = max(500, min(820, girl.x))
-    girl.y = max(475, min(530, girl.y))
 
 def draw():
     global image, door
@@ -47,7 +45,11 @@ def handle_events():
                 girl.handle_event(event)
 
 def update():
-    game_world.update()
+    global girl
+    if girl:  # girl 객체가 존재할 경우에만 실행
+        girl.x = max(500, min(820, girl.x))  # x축 이동 범위 제한
+        girl.y = max(475, min(530, girl.y))  # y축 이동 범위 제한
+    game_world.update()  # 다른 객체들도 업데이트
 def pause(): pass
 def resume(): pass
 
