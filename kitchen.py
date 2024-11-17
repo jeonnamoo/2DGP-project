@@ -13,7 +13,7 @@ image = None
 door1 = None
 door2 = None
 door1_x, door1_y = 803, 275  # 문 위치
-door2_x, door2_y = 1000, 800
+door2_x, door2_y = 780, 750
 width, height = 1440, 960  # Yard 크기
 girl = None
 

@@ -17,7 +17,7 @@ door4 = None
 door1_x, door1_y = 820, 300  # 첫 번째 문 위치
 door2_x, door2_y = 410, 160  # 두 번째 문 위치
 door3_x, door3_y = 790, 800  # 첫 번째 문 위치
-door4_x, door4_y = 910, 910  # 두 번째 문 위치
+door4_x, door4_y = 1290, 445  # 두 번째 문 위치
 width, height = 1440, 960  # Livingroom 크기
 girl = None
 
@@ -80,7 +80,7 @@ def handle_events():
 def update():
     global girl
     if girl:  # girl 객체가 존재할 경우에만 실행
-        girl.x = max(200, min(1240, girl.x))  # x축 이동 범위 제한
+        girl.x = max(200, min(1290, girl.x))  # x축 이동 범위 제한
         girl.y = max(150, min(810, girl.y))  # y축 이동 범위 제한
     game_world.update()  # 다른 객체들도 업데이트
 
