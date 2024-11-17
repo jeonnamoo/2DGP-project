@@ -1,10 +1,9 @@
 from pico2d import *
-
 import game_framework
 import game_world
-import yard
 from door import Door
 from girl import Girl
+import yard
 
 
 image = None
@@ -15,9 +14,18 @@ girl = None
 
 
 def init():
-    global image
+    global image, girl
     image = load_image('livingroom.png')  # 배경 이미지 로드
+    door = Door(width=32, height=32)  # Initialize door size
 
+    if not girl:  # Use the existing girl instance
+        girl = Girl()
+        game_world.add_object(girl, 2)
+
+        # Reset girl's position and constraints for the living room
+    girl.x, girl.y = 300, 200
+    girl.min_x, girl.max_x = 200, 1240
+    girl.min_y, girl.max_y = 150, 810
 
 
 
@@ -47,9 +55,11 @@ def handle_events():
 def update():
     global girl
     if girl:
-        girl.x = max(200, min(1240, girl.x))  # x축 이동 범위 제한
-        girl.y = max(150, min(810, girl.y))  # y축 이동 범위 제한
-    game_world.update()  # 다른 객체들도 업데이트
+        # Constrain girl's movement within the living room's boundaries
+        girl.x = max(girl.min_x, min(girl.max_x, girl.x))
+        girl.y = max(girl.min_y, min(girl.max_y, girl.y))
+    game_world.update()
+
 def pause(): pass
 def resume(): pass
 def finish():
