@@ -30,7 +30,7 @@ def draw():
     update_canvas()
 
 def handle_events():
-    global girl
+    global girl, door
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -38,7 +38,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
-            if 700 <= girl.x <= 740 and 540 <= girl.y <= 560:  # 특정 범위 확인
+            if 700 <= girl.x <= 740 and 500 <= girl.y <= 600:  # 특정 범위 확인
                 game_framework.change_mode(livingroom)
         else:
             if girl:
@@ -52,4 +52,5 @@ def update():
     game_world.update()  # 다른 객체들도 업데이트
 def pause(): pass
 def resume(): pass
+def finish(): pass
 
