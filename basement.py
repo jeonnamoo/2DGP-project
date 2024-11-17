@@ -10,7 +10,7 @@ from girl import Girl
 image = None
 door = None
 
-door_x, door_y = 803, 275  # 문 위치
+door_x, door_y = 420, 770  # 문 위치
 
 width, height = 1440, 960  # Yard 크기
 girl = None
