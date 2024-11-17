@@ -34,4 +34,9 @@ def clear():
     for layer in world:
         layer.clear()
 
-
+def get_object_by_class(cls):
+    for layer in world:
+        for o in layer:
+            if isinstance(o, cls):
+                return o
+    return None

@@ -52,5 +52,8 @@ def update():
     game_world.update()  # 다른 객체들도 업데이트
 def pause(): pass
 def resume(): pass
-def finish(): pass
+def finish():
+    global image, door
+    del image
+    del door
 
