@@ -2,6 +2,7 @@ from pico2d import *
 
 import game_framework
 import game_world
+import yard
 from door import Door
 from girl import Girl
 
@@ -33,13 +34,15 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+            if 300 <= girl.x <= 360 and 100 <= girl.y <= 120:  # 특정 범위 확인
+                game_framework.change_mode(yard)
 
         else:
             if girl:
                 girl.handle_event(event)
 
 def update():
-
     game_world.update()  # 다른 객체들도 업데이트
 def pause(): pass
 def resume(): pass
