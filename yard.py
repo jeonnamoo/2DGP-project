@@ -18,8 +18,13 @@ def init():
     image = load_image('yard.png')  # 배경 이미지 로드
     door = Door(width=32, height=32)  # 문 크기 설정
 
-    girl = Girl()
-    game_world.add_object(girl, 2)
+    girl = game_world.get_object_by_class(Girl)  # 기존 girl 객체 가져오기
+    if not girl:  # girl 객체가 없으면 새로 생성
+        girl = Girl()
+        game_world.add_object(girl, 2)
+
+    girl.x, girl.y = 720, 550  # 초기 위치
+
 
 def draw():
     global image, door
@@ -52,6 +57,7 @@ def update():
         girl.x = max(500, min(820, girl.x))  # x축 이동 범위 제한
         girl.y = max(475, min(530, girl.y))  # y축 이동 범위 제한
     game_world.update()  # 다른 객체들도 업데이트
+
 def pause(): pass
 def resume(): pass
 def finish():

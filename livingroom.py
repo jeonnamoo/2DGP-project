@@ -2,36 +2,43 @@ from pico2d import *
 
 import game_framework
 import game_world
+import kitchen
 import yard
 from door import Door
 from girl import Girl
 
-
-
 image = None
-door = None
-door_x, door_y = 800, 300  # 문 위치
-width, height = 1440, 960  # Yard 크기
+door1 = None
+door2 = None
+door1_x, door1_y = 820, 300  # 첫 번째 문 위치
+door2_x, door2_y = 300, 200  # 두 번째 문 위치
+width, height = 1440, 960  # Livingroom 크기
 girl = None
 
 def init():
-    global image, door, girl
+    global image, door1, door2, girl
     image = load_image('livingroom.png')  # 배경 이미지 로드
-    door = Door(width=32, height=32)  # 문 크기 설정
+    door1 = Door(width=32, height=32)  # 첫 번째 문 크기 설정
+    door2 = Door(width=32, height=32)  # 두 번째 문 크기 설정
 
-    girl = Girl()
-    game_world.add_object(girl, 2)
+    girl = game_world.get_object_by_class(Girl)  # 기존 girl 객체 가져오기
+    if not girl:  # girl 객체가 없으면 새로 생성
+        girl = Girl()
+        game_world.add_object(girl, 2)
+
+    girl.x, girl.y = 820, 300  # 초기 위치
 
 def draw():
-    global image, door
+    global image, door1, door2
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
-    door.draw(door_x, door_y)  # 문 그리기
+    door1.draw(door1_x, door1_y)  # 첫 번째 문 그리기
+    door2.draw(door2_x, door2_y)  # 두 번째 문 그리기
     game_world.render()
     update_canvas()
 
 def handle_events():
-    global girl, door
+    global girl, door1, door2
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -39,10 +46,15 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
-            # Girl과 Door 사이의 거리 계산
-            distance = ((girl.x - door_x) ** 2 + (girl.y - door_y) ** 2) ** 0.5
-            if distance <= 30:  # 문 근처(거리 50 이하)일 때만 Livingroom으로 전환
+            # 첫 번째 문 근처에서 눌렀을 경우
+            distance1 = ((girl.x - door1_x) ** 2 + (girl.y - door1_y) ** 2) ** 0.5
+            if distance1 <= 30:  # 문 근처(거리 30 이하)
                 game_framework.change_mode(yard)
+
+            # 두 번째 문 근처에서 눌렀을 경우
+            distance2 = ((girl.x - door2_x) ** 2 + (girl.y - door2_y) ** 2) ** 0.5
+            if distance2 <= 30:  # 문 근처(거리 30 이하)
+                game_framework.change_mode(kitchen)
         else:
             if girl:
                 girl.handle_event(event)
@@ -53,10 +65,11 @@ def update():
         girl.x = max(200, min(1240, girl.x))  # x축 이동 범위 제한
         girl.y = max(150, min(810, girl.y))  # y축 이동 범위 제한
     game_world.update()  # 다른 객체들도 업데이트
+
 def pause(): pass
 def resume(): pass
 def finish():
-    global image, door
+    global image, door1, door2
     del image
-    del door
-
+    del door1
+    del door2
