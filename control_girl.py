@@ -6,7 +6,7 @@ from girl import Girl
 from livingroom import Livingroom
 
 running = True
-current_mode = "yard"  # 현재 모드 상태 (yard 또는 livingroom)
+current_mode = "yard"  # 현재 모드 상태
 girl = None
 
 def handle_events():
@@ -19,8 +19,8 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
         elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
-            if current_mode == "yard" and check_collision_with_door():
-                switch_to_livingroom()  # Livingroom으로 전환
+            if current_mode == "yard" and check_girl_position():
+                switch_to_livingroom()
         else:
             girl.handle_event(event)
 
@@ -39,11 +39,9 @@ def reset_world():
     girl = Girl()
     game_world.add_object(girl, 1)  # Girl 객체 추가
 
-def check_collision_with_door():
-    yard = game_world.get_object_by_class(Yard)
-    if yard:
-        return game_world.collide(girl, yard.get_door())
-    return False
+def check_girl_position():
+    # girl 위치를 확인하여 특정 조건을 만족하는지 판단
+    return girl.y >= 520 and 720 <= girl.x <= 752
 
 def switch_to_livingroom():
     global current_mode

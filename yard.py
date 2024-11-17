@@ -1,4 +1,6 @@
 from pico2d import *
+import game_framework
+import livingroom
 from door import Door
 
 class Yard:
@@ -7,7 +9,19 @@ class Yard:
         self.door = Door(width=32, height=32)  # 문 크기 설정
         self.x, self.y = 720, 480  # Yard 중심 좌표
         self.width, self.height = 1440, 960  # Yard 크기
-        self.door_x, self.door_y = 720, 550  # 문 위치
+        self.door_x, self.door_y = 736, 540  # 문 위치
+
+    def handle_events(self, girl):
+        events = get_events()
+        for event in events:
+            if event.type == SDL_QUIT:
+                game_framework.quit()
+            elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+                game_framework.change_mode(livingroom)
+            elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+                # 조건 확인: 특정 범위 안에 girl이 있을 때만 전환
+                if 720 <= girl.x <= 752 and girl.y >= 520:
+                    game_framework.change_mode(livingroom)
 
     def draw(self):
         # 배경 그리기
@@ -17,4 +31,3 @@ class Yard:
 
     def update(self):
         pass
-
