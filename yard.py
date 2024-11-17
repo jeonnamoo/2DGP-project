@@ -1,33 +1,41 @@
 from pico2d import *
+
 import game_framework
-import livingroom
+import girl
 from door import Door
+from girl import Girl
 
-class Yard:
-    def __init__(self):
-        self.image = load_image('yard.png')  # 배경 이미지
-        self.door = Door(width=32, height=32)  # 문 크기 설정
-        self.x, self.y = 720, 480  # Yard 중심 좌표
-        self.width, self.height = 1440, 960  # Yard 크기
-        self.door_x, self.door_y = 736, 540  # 문 위치
 
-    def handle_events(self, girl):
-        events = get_events()
-        for event in events:
-            if event.type == SDL_QUIT:
-                game_framework.quit()
-            elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+image = None
+door = None
+door_x, door_y = 720, 550  # 문 위치
+width, height = 1440, 960  # Yard 크기
+
+def init():
+    global image, door
+    image = load_image('yard.png')  # 배경 이미지 로드
+    door = Door(width=32, height=32)  # 문 크기 설정
+
+def draw():
+    global image, door
+    clear_canvas()
+    image.draw_to_origin(0, 0, width, height)  # 배경 그리기
+    door.draw(door_x, door_y)  # 문 그리기
+    update_canvas()
+
+def handle_events():
+    events = get_events()
+    for event in events:
+        if event.type == SDL_QUIT:
+            game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+            if 700 <= girl.x <= 740 and 540 <= girl.y <= 560:  # 특정 범위 확인
+                import livingroom
                 game_framework.change_mode(livingroom)
-            elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
-                # 조건 확인: 특정 범위 안에 girl이 있을 때만 전환
-                if 720 <= girl.x <= 752 and girl.y >= 520:
-                    game_framework.change_mode(livingroom)
 
-    def draw(self):
-        # 배경 그리기
-        self.image.draw_to_origin(0, 0, self.width, self.height)
-        # 문 그리기
-        self.door.draw(self.door_x, self.door_y)
+def update(): pass
+def pause(): pass
+def resume(): pass
 
-    def update(self):
-        pass

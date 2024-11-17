@@ -4,8 +4,10 @@ import game_framework
 import game_world
 import information_mode
 import title_mode
-from yard import Yard
+import yard
+import livingroom
 from girl import Girl
+from door import Door
 
 
 def handle_events():
@@ -26,11 +28,12 @@ def init():
 
     running = True
 
-    yard = Yard()
-    game_world.add_object(yard, 0)
 
     girl = Girl()
-    game_world.add_object(girl, 1)
+    game_world.add_object(girl, 2)
+
+    door = Door()
+    game_world.add_object(door, 1)
 
 def finish():
     game_world.clear()

@@ -16,4 +16,3 @@ class Door:
         self.image.draw_to_origin(x - self.width // 2, y - self.height // 2, self.width, self.height)
 
 
-

@@ -2,7 +2,7 @@ from pico2d import get_time, load_image, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDL
 from state_machine import *
 from tool import Broom, Duster, Mop
 import game_world
-from yard import Yard
+import yard
 
 
 class Idle:
@@ -65,7 +65,7 @@ class Run:
         girl.x += girl.dir_x * 1.5  # X축 이동
         girl.y += girl.dir_y * 1.5  # Y축 이동 (위: +, 아래: -)
 
-        yard = game_world.get_object_by_class(Yard)
+
         if yard:
             girl.x = max(500, min(820, girl.x))
             girl.y = max(475, min(530, girl.y))
@@ -107,11 +107,3 @@ class Girl:
     def set_item(self, item):
         self.item = item
 
-    def get_bb(self):
-        # 충돌 판정을 위한 Bounding Box 반환
-        return self.x - 20, self.y - 50, self.x + 20, self.y + 50
-
-    def handle_collision(self, group, other):
-        # 충돌 시 동작 정의
-        if group == 'Door:door':
-            pass

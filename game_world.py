@@ -35,16 +35,3 @@ def clear():
         layer.clear()
 
 
-
-
-
-
-
-
-def get_object_by_class(cls):
-    """특정 클래스의 첫 번째 객체를 반환합니다."""
-    for layer in world:
-        for obj in layer:
-            if isinstance(obj, cls):
-                return obj
-    return None  # 해당 클래스의 객체가 없으면 None 반환
