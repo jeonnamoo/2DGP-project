@@ -6,7 +6,7 @@ import game_world
 class Door:
     image = None
 
-    def __init__(self, width=48, height=96, scale=4):  # 기본 크기와 배율 설정
+    def __init__(self, width=32, height=32, scale=4):  # 기본 크기와 배율 설정
         if Door.image is None:
             Door.image = load_image('door.png')  # 문 이미지 로드
         self.width, self.height = width * scale, height * scale  # 문 크기를 4배로 설정
