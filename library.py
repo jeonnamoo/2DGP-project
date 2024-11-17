@@ -26,7 +26,7 @@ def init():
         girl = Girl()
         game_world.add_object(girl, 2)
 
-    girl.x, girl.y = 803, 275  # 초기 위치
+    girl.x, girl.y = 700, 190  # 초기 위치
 
 
 def draw():
