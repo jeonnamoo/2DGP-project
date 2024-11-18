@@ -6,7 +6,7 @@ from pico2d import *
 class Mop:
     image = None
 
-    def __init__(self, width=40, height=50, scale=2):  # 기본 크기와 배율 설정
+    def __init__(self, width=40, height=50, scale=3):  # 기본 크기와 배율 설정
         if Mop.image is None:
             Mop.image = load_image('mop.png')  # 문 이미지 로드
         self.width, self.height = width * scale, height * scale  # 문 크기를 4배로 설정
