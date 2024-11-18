@@ -42,7 +42,7 @@ def init():
     if last_used_door and last_used_door in door_positions:
         girl.x, girl.y = door_positions[last_used_door]
     else:  # 기본 위치
-        girl.x, girl.y = 700, 500
+        girl.x, girl.y = 820, 300
 
 def draw():
     global image, doors

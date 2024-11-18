@@ -53,6 +53,7 @@ def handle_events():
                 game_framework.change_mode(kitchen)
 
 
+
         else:
             if girl:
                 girl.handle_event(event)

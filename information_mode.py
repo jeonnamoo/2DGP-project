@@ -7,27 +7,26 @@ import play_mode
 from pannel import Pannel
 
 
-def init():
-    global pannel
-    pannel = Pannel()
-    game_world.add_object(pannel, 3)
+class InformationMode:
+    def __init__(self):
+        self.pannel = None
 
-def finish():
-    game_world.remove_object(pannel)
+    def init(self):
+        from pannel import Pannel
+        self.pannel = Pannel()
 
-def handle_events():
-    events = get_events()
-    for event in events:
-        if event.type == SDL_QUIT:
-            game_framework.quit()
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-            game_framework.pop_mode()
+    def finish(self):
+        del self.pannel
 
-def draw():
-    clear_canvas()
-    game_world.render()
-    update_canvas()
+    def draw(self):
+        if self.pannel:
+            self.pannel.draw()
 
-def update(): pass
-def pause(): pass
-def resume(): pass
+    def handle_events(self):
+        events = get_events()
+        for event in events:
+            if event.type == SDL_QUIT:
+                game_framework.quit()
+            elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+                # information_mode 종료
+                game_framework.pop_information_mode()
