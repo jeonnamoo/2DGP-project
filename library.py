@@ -5,20 +5,22 @@ import game_world
 import livingroom
 from door import Door
 from girl import Girl
+from duster import Duster
 
 image = None
 door = None
-
+duster = None
 door_x, door_y =700 , 190  # 문 위치
-
+duster_x, duster_y = 720, 630
 width, height = 1440, 960  # Yard 크기
 girl = None
 
 
 def init():
-    global image, door, girl
+    global image, door, girl, duster
     image = load_image('library.png')  # 배경 이미지 로드
     door = Door(width=32, height=32)  # 첫 번째 문 크기 설정
+    duster = Duster(width=32, height=32)
 
 
     girl = game_world.get_object_by_class(Girl)  # 기존 girl 객체 가져오기
@@ -30,10 +32,11 @@ def init():
 
 
 def draw():
-    global image, door
+    global image, door, duster
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 첫 번째 문 그리기
+    duster.draw(duster_x, duster_y)
     game_world.render()
     update_canvas()
 
@@ -73,7 +76,8 @@ def resume(): pass
 
 
 def finish():
-    global image, door
+    global image, door, duster
     del image
     del door
+    del duster
 
