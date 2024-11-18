@@ -4,7 +4,7 @@ import game_framework
 import game_world
 from door import Door
 from girl import Girl
-from tool import Broom
+from broom import Broom
 import livingroom
 
 
@@ -12,25 +12,31 @@ image = None
 door = None
 broom = None
 door_x, door_y = 720, 550  # 문 위치
-broom_x, broom_y = 600, 500
 width, height = 1440, 960  # Yard 크기
+broom_x, broom_y = 520, 490
 girl = None
 
 def init():
-    global image, door, girl
+    global image, door, girl, broom
     image = load_image('yard.png')  # 배경 이미지 로드
     door = Door(width=32, height=32)  # 문 크기 설정
-    broom = Broom(broom_x, broom_y)
+    broom = Broom(width=32, height=32)  # 문 크기 설정
 
-    girl = Girl()
-    game_world.add_object(girl, 2)
-    game_world.add_object(broom, 1)  # Broom 객체를 game_world에 추가
+    girl = game_world.get_object_by_class(Girl)  # 기존 girl 객체 가져오기
+    if not girl:  # girl 객체가 없으면 새로 생성
+        girl = Girl()
+        game_world.add_object(girl, 2)
+
+    girl.x, girl.y = 720, 550  # 초기 위치
+
+
 
 def draw():
-    global image, door
+    global image, door, broom
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 문 그리기
+    broom.draw(broom_x, broom_y)
     game_world.render()
     update_canvas()
 
@@ -57,6 +63,7 @@ def update():
         girl.x = max(500, min(820, girl.x))  # x축 이동 범위 제한
         girl.y = max(475, min(530, girl.y))  # y축 이동 범위 제한
     game_world.update()  # 다른 객체들도 업데이트
+
 def pause(): pass
 def resume(): pass
 def finish():
@@ -64,3 +71,4 @@ def finish():
     del image
     del door
     del broom
+
