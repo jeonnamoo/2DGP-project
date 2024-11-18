@@ -2,24 +2,25 @@ from pico2d import *
 
 import game_framework
 import game_world
-import kitchen
 import livingroom
 from door import Door
 from girl import Girl
+from key import Key
 
 image = None
 door = None
-
+key = None
 door_x, door_y = 244, 248  # 문 위치
-
+key_x, key_y = 1070, 570
 width, height = 1440, 960  # Yard 크기
 girl = None
 
 
 def init():
-    global image, door, girl
+    global image, door, girl, key
     image = load_image('bedroom.png')  # 배경 이미지 로드
     door = Door(width=32, height=32)  # 첫 번째 문 크기 설정
+    key = Key(width=32, height =32)
 
 
     girl = game_world.get_object_by_class(Girl)  # 기존 girl 객체 가져오기
@@ -31,10 +32,11 @@ def init():
 
 
 def draw():
-    global image, door
+    global image, door, key
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 첫 번째 문 그리기
+    key.draw(key_x, key_y)
     game_world.render()
     update_canvas()
 
@@ -74,7 +76,8 @@ def resume(): pass
 
 
 def finish():
-    global image, door
+    global image, door, key
     del image
     del door
+    del key
 
