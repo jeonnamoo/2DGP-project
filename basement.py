@@ -9,9 +9,11 @@ from door import Door
 from girl import Girl
 from mop import Mop
 from web import Web
+from can import Can
 
 image = None
 web_list = []
+can_list = []
 door = None
 mop = None
 
@@ -24,9 +26,11 @@ girl = None
 web_x_min, web_x_max = 270, 1180
 web_y_min, web_y_max = 210, 760
 
+can_x_min, can_x_max = 270, 1180
+can_y_min, can_y_max = 210, 760
 
 def init():
-    global image, door, girl, mop, web_list
+    global image, door, girl, mop, web_list, can_list
     image = load_image('basement.png')  # 배경 이미지 로드
     door = Door(width=32, height=32)  # 첫 번째 문 크기 설정
     mop = Mop(width=32, height=32)
@@ -45,6 +49,12 @@ def init():
         web = Web()
         web_list.append((web,x,y))
 
+    for _ in range(10):
+        x = random.randint(can_x_min, can_x_max)
+        y = random.randint(can_y_min, can_y_max)
+        can = Can()
+        can_list.append((can,x,y))
+
 
 
 
@@ -57,6 +67,9 @@ def draw():
 
     for web, x, y in web_list:
         web.draw(x,y)
+
+    for can, x, y in can_list:
+        can.draw(x,y)
 
 
     game_world.render()
@@ -95,9 +108,10 @@ def pause(): pass
 def resume(): pass
 
 def finish():
-    global image, door, mop, web_list
+    global image, door, mop, web_list, can_list
     del image
     del door
     del mop
     web_list.clear()
+    can_list.clear()
 

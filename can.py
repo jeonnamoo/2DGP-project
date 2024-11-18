@@ -6,7 +6,7 @@ from pico2d import *
 class Can:
     image = None
 
-    def __init__(self, width=40, height=50, scale=3):  # 기본 크기와 배율 설정
+    def __init__(self, width=40, height=50, scale=1.2):  # 기본 크기와 배율 설정
         if Can.image is None:
             Can.image = load_image('can.png')  # 문 이미지 로드
         self.width, self.height = width * scale, height * scale  # 문 크기를 4배로 설정
