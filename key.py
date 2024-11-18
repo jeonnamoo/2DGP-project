@@ -1,14 +1,14 @@
 from pico2d import *
 
+import game_world
 
 
-
-class Broom:
+class Key:
     image = None
 
-    def __init__(self, width=40, height=50, scale=4):  # 기본 크기와 배율 설정
-        if Broom.image is None:
-            Broom.image = load_image('broom.png')  # 문 이미지 로드
+    def __init__(self, width=40, height=50, scale=5):  # 기본 크기와 배율 설정
+        if Key.image is None:
+            Key.image = load_image('key.png')  # 문 이미지 로드
         self.width, self.height = width * scale, height * scale  # 문 크기를 4배로 설정
 
     def draw(self, x, y):

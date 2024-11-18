@@ -5,20 +5,22 @@ import game_world
 import kitchen
 from door import Door
 from girl import Girl
+from mop import Mop
 
 image = None
 door = None
-
+mop = None
 door_x, door_y = 420, 770  # 문 위치
-
 width, height = 1440, 960  # Yard 크기
+mop_x, mop_y = 1100, 300
 girl = None
 
 
 def init():
-    global image, door, girl
+    global image, door, girl, mop
     image = load_image('basement.png')  # 배경 이미지 로드
     door = Door(width=32, height=32)  # 첫 번째 문 크기 설정
+    mop = Mop(width=32, height=32)
 
 
     girl = game_world.get_object_by_class(Girl)  # 기존 girl 객체 가져오기
@@ -30,10 +32,11 @@ def init():
 
 
 def draw():
-    global image, door
+    global image, door, mop
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 첫 번째 문 그리기
+    mop.draw(mop_x, mop_y)
     game_world.render()
     update_canvas()
 
@@ -52,8 +55,6 @@ def handle_events():
             if distance1 <= 30:  # 문 근처(거리 30 이하)
                 game_framework.change_mode(kitchen)
 
-
-
         else:
             if girl:
                 girl.handle_event(event)
@@ -69,12 +70,11 @@ def update():
 
 def pause(): pass
 
-
 def resume(): pass
 
-
 def finish():
-    global image, door
+    global image, door, mop
     del image
     del door
+    del mop
 
