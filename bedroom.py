@@ -64,8 +64,8 @@ def handle_events():
 def update():
     global girl
     if girl:  # girl 객체가 존재할 경우에만 실행
-        girl.x = max(200, min(1240, girl.x))  # x축 이동 범위 제한
-        girl.y = max(150, min(810, girl.y))  # y축 이동 범위 제한
+        girl.x = max(150, min(1290, girl.x))  # x축 이동 범위 제한
+        girl.y = max(250, min(610, girl.y))  # y축 이동 범위 제한
     game_world.update()  # 다른 객체들도 업데이트
 
 
