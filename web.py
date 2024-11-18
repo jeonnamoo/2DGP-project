@@ -6,7 +6,7 @@ from pico2d import *
 class Web:
     image = None
 
-    def __init__(self, width=40, height=50, scale=4):  # 기본 크기와 배율 설정
+    def __init__(self, width=40, height=50, scale=3):  # 기본 크기와 배율 설정
         if Web.image is None:
             Web.image = load_image('web.png')  # 문 이미지 로드
         self.width, self.height = width * scale, height * scale  # 문 크기를 4배로 설정

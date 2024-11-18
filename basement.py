@@ -1,3 +1,5 @@
+import random
+
 from pico2d import *
 
 import game_framework
@@ -6,18 +8,25 @@ import kitchen
 from door import Door
 from girl import Girl
 from mop import Mop
+from web import Web
 
 image = None
+web_list = []
 door = None
 mop = None
+
 door_x, door_y = 420, 770  # 문 위치
 width, height = 1440, 960  # Yard 크기
 mop_x, mop_y = 1100, 300
 girl = None
 
+#web 배치 범위 설정
+web_x_min, web_x_max = 270, 1180
+web_y_min, web_y_max = 210, 760
+
 
 def init():
-    global image, door, girl, mop
+    global image, door, girl, mop, web_list
     image = load_image('basement.png')  # 배경 이미지 로드
     door = Door(width=32, height=32)  # 첫 번째 문 크기 설정
     mop = Mop(width=32, height=32)
@@ -30,6 +39,14 @@ def init():
 
     girl.x, girl.y = 420, 770  # 초기 위치
 
+    for _ in range(10):
+        x = random.randint(web_x_min, web_x_max)
+        y = random.randint(web_y_min, web_y_max)
+        web = Web()
+        web_list.append((web,x,y))
+
+
+
 
 def draw():
     global image, door, mop
@@ -37,6 +54,11 @@ def draw():
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 첫 번째 문 그리기
     mop.draw(mop_x, mop_y)
+
+    for web, x, y in web_list:
+        web.draw(x,y)
+
+
     game_world.render()
     update_canvas()
 
@@ -73,8 +95,9 @@ def pause(): pass
 def resume(): pass
 
 def finish():
-    global image, door, mop
+    global image, door, mop, web_list
     del image
     del door
     del mop
+    web_list.clear()
 
