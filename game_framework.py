@@ -1,6 +1,6 @@
 import information_mode
 
-running = None
+
 stack = None
 
 

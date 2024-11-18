@@ -20,9 +20,8 @@ def handle_events():
             if event.key == SDLK_ESCAPE:
                 game_framework.change_mode(title_mode)
             elif event.key == SDLK_i:
-                # information_mode 활성화
-                if not any(isinstance(m, information_mode.InformationMode) for m in game_framework.stack):
-                    game_framework.push_information_mode(information_mode.InformationMode())
+                import information_mode
+                game_framework.push_information_mode(information_mode.InformationMode())
             else:
                 if girl:
                     girl.handle_event(event)
