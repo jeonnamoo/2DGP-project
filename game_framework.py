@@ -1,6 +1,4 @@
-import information_mode
-
-
+running = None
 stack = None
 
 
@@ -16,10 +14,11 @@ def change_mode(mode):
 
 def push_mode(mode):
     global stack
-    if stack:
+    if (len(stack) > 0):
         stack[-1].pause()
     stack.append(mode)
-    mode.init()  # 모드 초기화 함수 호출
+    mode.init()
+
 
 def pop_mode():
     global stack
@@ -38,18 +37,6 @@ def quit():
     global running
     running = False
 
-def push_information_mode(mode):
-    global stack
-    if mode not in stack:
-        stack.append(mode)
-        mode.init()
-
-def pop_information_mode():
-    global stack
-    if stack and isinstance(stack[-1], information_mode.InformationMode):
-        stack[-1].finish()
-        stack.pop()
-
 
 def run(start_mode):
     global running, stack
@@ -61,11 +48,6 @@ def run(start_mode):
         stack[-1].handle_events()
         stack[-1].update()
         stack[-1].draw()
-
-        # 정보 패널 모드가 활성화된 경우 최상위에서 렌더링
-        for mode in stack:
-            if isinstance(mode, information_mode.InformationMode):
-                mode.draw()
 
     while stack:
         stack[-1].finish()

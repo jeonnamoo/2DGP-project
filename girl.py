@@ -62,8 +62,8 @@ class Run:
     def do(girl):
         # Run 상태에서만 애니메이션 작동 및 이동 처리
         girl.frame = (girl.frame + 1) % 4  # 4개의 프레임 순환
-        girl.x += girl.dir_x * 1.4  # X축 이동
-        girl.y += girl.dir_y * 1.4  # Y축 이동 (위: +, 아래: -)
+        girl.x += girl.dir_x * 1.5  # X축 이동
+        girl.y += girl.dir_y * 1.5  # Y축 이동 (위: +, 아래: -)
 
 
 
@@ -103,4 +103,3 @@ class Girl:
 
     def set_item(self, item):
         self.item = item
-
