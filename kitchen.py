@@ -1,3 +1,5 @@
+import random
+
 from pico2d import *
 
 import basement
@@ -6,8 +8,16 @@ import game_world
 import livingroom
 from door import Door
 from girl import Girl
+from web import Web
+from can import Can
+from stain import Stain
+
 
 image = None
+
+web_list = []
+can_list = []
+stain_list = []
 door1 = None
 door2 = None
 door1_x, door1_y = 803, 275  # 첫 번째 문 위치
@@ -16,8 +26,17 @@ width, height = 1440, 960  # Kitchen 크기
 girl = None
 last_door_used = None  # 마지막 사용된 문
 
+web_x_min, web_x_max = 200, 1240
+web_y_min, web_y_max = 150, 730
+
+can_x_min, can_x_max = 200, 1240
+can_y_min, can_y_max = 150, 730
+
+stain_x_min, stain_x_max = 200, 1240
+stain_y_min, stain_y_max = 150, 730
+
 def init():
-    global image, door1, door2, girl, last_door_used
+    global image, door1, door2, girl, last_door_used, web_list, can_list, stain_list
     image = load_image('kitchen.png')  # 배경 이미지 로드
     door1 = Door(width=32, height=32)  # 첫 번째 문 크기 설정
     door2 = Door(width=32, height=32)  # 두 번째 문 크기 설정
@@ -35,12 +54,41 @@ def init():
     else:  # 기본 초기 위치
         girl.x, girl.y = 803, 275
 
+    for _ in range(10):
+        x = random.randint(web_x_min, web_x_max)
+        y = random.randint(web_y_min, web_y_max)
+        web = Web()
+        web_list.append((web,x,y))
+
+    for _ in range(10):
+        x = random.randint(can_x_min, can_x_max)
+        y = random.randint(can_y_min, can_y_max)
+        can = Can()
+        can_list.append((can,x,y))
+
+    for _ in range(10):
+        x = random.randint(stain_x_min, stain_x_max)
+        y = random.randint(stain_y_min, stain_y_max)
+        stain = Stain()
+        stain_list.append((stain,x,y))
+
 def draw():
     global image, door1, door2
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door1.draw(door1_x, door1_y)  # 첫 번째 문 그리기
     door2.draw(door2_x, door2_y)  # 두 번째 문 그리기
+
+    for web, x, y in web_list:
+        web.draw(x,y)
+
+    for can, x, y in can_list:
+        can.draw(x,y)
+
+    for stain, x, y in stain_list:
+        stain.draw(x,y)
+
+
     game_world.render()
     update_canvas()
 
@@ -78,7 +126,10 @@ def update():
 def pause(): pass
 def resume(): pass
 def finish():
-    global image, door1, door2
+    global image, door1, door2, web_list, can_list, stain_list
     del image
     del door1
     del door2
+    web_list.clear()
+    can_list.clear()
+    stain_list.clear()

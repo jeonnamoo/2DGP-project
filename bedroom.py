@@ -1,3 +1,5 @@
+import random
+
 from pico2d import *
 
 import game_framework
@@ -6,8 +8,17 @@ import livingroom
 from door import Door
 from girl import Girl
 from key import Key
+from web import Web
+from can import Can
+from stain import Stain
+
 
 image = None
+
+web_list = []
+can_list = []
+stain_list = []
+
 door = None
 key = None
 door_x, door_y = 244, 248  # 문 위치
@@ -15,9 +26,19 @@ key_x, key_y = 1070, 570
 width, height = 1440, 960  # Yard 크기
 girl = None
 
+#web 배치 범위 설정
+web_x_min, web_x_max = 150, 1290
+web_y_min, web_y_max = 250, 610
+
+can_x_min, can_x_max = 150, 1290
+can_y_min, can_y_max = 250, 610
+
+stain_x_min, stain_x_max = 150, 1290
+stain_y_min, stain_y_max = 250, 610
+
 
 def init():
-    global image, door, girl, key
+    global image, door, girl, key, web_list, can_list, stain_list
     image = load_image('bedroom.png')  # 배경 이미지 로드
     door = Door(width=32, height=32)  # 첫 번째 문 크기 설정
     key = Key(width=32, height =32)
@@ -30,6 +51,24 @@ def init():
 
     girl.x, girl.y = 244, 248  # 초기 위치
 
+    for _ in range(10):
+        x = random.randint(web_x_min, web_x_max)
+        y = random.randint(web_y_min, web_y_max)
+        web = Web()
+        web_list.append((web,x,y))
+
+    for _ in range(10):
+        x = random.randint(can_x_min, can_x_max)
+        y = random.randint(can_y_min, can_y_max)
+        can = Can()
+        can_list.append((can,x,y))
+
+    for _ in range(10):
+        x = random.randint(stain_x_min, stain_x_max)
+        y = random.randint(stain_y_min, stain_y_max)
+        stain = Stain()
+        stain_list.append((stain,x,y))
+
 
 def draw():
     global image, door, key
@@ -37,6 +76,17 @@ def draw():
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 첫 번째 문 그리기
     key.draw(key_x, key_y)
+
+    for web, x, y in web_list:
+        web.draw(x,y)
+
+    for can, x, y in can_list:
+        can.draw(x,y)
+
+    for stain, x, y in stain_list:
+        stain.draw(x,y)
+
+
     game_world.render()
     update_canvas()
 
@@ -76,8 +126,12 @@ def resume(): pass
 
 
 def finish():
-    global image, door, key
+    global image, door, key, web_list, can_list, stain_list
     del image
     del door
     del key
+    web_list.clear()
+    can_list.clear()
+    stain_list.clear()
+
 
