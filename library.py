@@ -11,6 +11,9 @@ from duster import Duster
 from web import Web
 from can import Can
 from stain import Stain
+from mop import Mop
+from broom import Broom
+from key import Key
 
 image = None
 web_list = []
@@ -36,7 +39,7 @@ stain_y_min, stain_y_max = 150, 610
 
 
 def init():
-    global image, door, girl, duster, web_list, can_list, stain_list
+    global image, door, girl, duster,mop, key, broom, web_list, can_list, stain_list
     image = load_image('library.png')  # 배경 이미지 로드
     door = Door(width=32, height=32)  # 첫 번째 문 크기 설정
     duster = Duster(width=32, height=32)
@@ -46,6 +49,16 @@ def init():
     if not girl:  # girl 객체가 없으면 새로 생성
         girl = Girl()
         game_world.add_object(girl, 2)
+
+
+    duster = game_world.get_object_by_class(Duster)
+    if not duster:
+        duster = Duster(width=32, height=32)
+        game_world.add_object(duster, 1)
+
+
+
+    duster.current_map = "library"
 
     girl.x, girl.y = 700, 190  # 초기 위치
 
@@ -73,7 +86,7 @@ def draw():
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 첫 번째 문 그리기
-    duster.draw(duster_x, duster_y)
+    duster.draw()
 
     for web, x, y in web_list:
         web.draw(x,y)
@@ -90,7 +103,7 @@ def draw():
 
 
 def handle_events():
-    global girl, door
+    global girl, door, broom, mop, key, duster
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -102,6 +115,21 @@ def handle_events():
             distance1 = ((girl.x - door_x) ** 2 + (girl.y - door_y) ** 2) ** 0.5
             if distance1 <= 30:  # 문 근처(거리 30 이하)
                 game_framework.change_mode(livingroom)
+            distance_to_duster = ((girl.x - duster.x) ** 2 + (girl.y - duster.y) ** 2) ** 0.5
+            if distance_to_duster <= 30 and not duster.attached:
+                duster.attach(girl)  # broom을 girl에 부착
+                if mop and mop.attached:
+                    mop.detach()
+                    mop.x, mop.y = 110, 300  # yard 초기 위치로 복귀
+                if duster and duster.attached:
+                    duster.detach()
+                    duster.x, duster.y = 720, 630  # yard 초기 위치로 복귀
+                if key and key.attached:
+                    key.detach()
+                    key.x, key.y = 1070, 570  # yard 초기 위치로 복귀
+                if broom and broom.attached:
+                    broom.detach()
+                    broom.x, broom.y = 520, 490  # yard 초기 위치로 복귀
 
 
         else:
@@ -124,10 +152,9 @@ def resume(): pass
 
 
 def finish():
-    global image, door, duster, web_list, can_list, stain_list
+    global image, door,  web_list, can_list, stain_list
     del image
     del door
-    del duster
     web_list.clear()
     can_list.clear()
     stain_list.clear()

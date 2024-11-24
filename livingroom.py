@@ -62,7 +62,7 @@ def init():
     if not broom:
         broom = Broom(width=32, height=32)
         game_world.add_object(broom, 1)
-        
+
     broom.current_map = "livingroom"  # 현재 맵을 livingroom으로 설정
 
     # 마지막 사용된 문에 따라 초기 위치 설정
@@ -138,15 +138,16 @@ def handle_events():
                 girl.handle_event(event)
 
 def update():
-    global girl, broom, broom_attached
-    if girl:
+    global girl, broom
+    if girl:  # girl 객체가 존재할 경우
         girl.x = max(200, min(1290, girl.x))  # x축 이동 범위 제한
         girl.y = max(150, min(810, girl.y))  # y축 이동 범위 제한
-    if game_framework.broom_attached:
-        broom.x, broom.y = girl.x, girl.y
-    game_world.update()
 
-    game_world.update()
+    if broom and broom.attached:  # broom이 부착된 상태일 경우 위치 동기화
+        broom.x, broom.y = girl.x, girl.y
+
+    game_world.update()  # 다른 객체 업데이트
+
 
 def finish():
     global image, doors, web_list, can_list, stain_list

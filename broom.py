@@ -28,7 +28,6 @@ class Broom:
             self.x, self.y = self.girl.x, self.girl.y
 
     def draw(self):
-        """broom을 그리는 조건"""
         if self.attached:  # 부착된 상태일 경우 현재 위치에 그림
             self.image.draw_to_origin(self.x - self.width // 2, self.y - self.height // 2, self.width, self.height)
         elif self.current_map == "yard":  # yard일 경우 초기 위치에 그림

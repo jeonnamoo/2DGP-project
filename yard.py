@@ -6,6 +6,9 @@ from door import Door
 from girl import Girl
 from broom import Broom
 import livingroom
+from mop import Mop
+from duster import Duster
+from key import Key
 
 
 image = None
@@ -16,11 +19,10 @@ width, height = 1440, 960  # Yard 크기
 broom_x, broom_y = 520, 490
 girl = None
 
-broom_attached = False
 
 
 def init():
-    global image, door, girl, broom
+    global image, door, girl, broom, mop, duster, key
     image = load_image('yard.png')  # 배경 이미지 로드
     door = Door(width=32, height=32)  # 문 크기 설정
 
@@ -35,6 +37,7 @@ def init():
         broom = Broom(width=32, height=32)
         game_world.add_object(broom, 1)
 
+
     broom.current_map = "yard"  # 현재 맵을 yard로 설정
 
     girl.x, girl.y = 720, 550  # 초기 위치
@@ -44,19 +47,18 @@ def init():
 
 
 def draw():
-    global image, door,broom, broom_attached
+    global image, door,broom
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 문 그리기
 
-    if not broom_attached:
-        broom.draw()
+    broom.draw()
     game_world.render()
 
     update_canvas()
 
 def handle_events():
-    global girl, door, broom
+    global girl, door, broom, mop, key, duster
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -71,6 +73,18 @@ def handle_events():
             distance_to_broom = ((girl.x - broom.x) ** 2 + (girl.y - broom.y) ** 2) ** 0.5
             if distance_to_broom <= 30 and not broom.attached:
                 broom.attach(girl)  # broom을 girl에 부착
+                if mop and mop.attached:
+                    mop.detach()
+                    mop.x, mop.y = 110, 300  # yard 초기 위치로 복귀
+                if duster and duster.attached:
+                    duster.detach()
+                    duster.x, duster.y = 720, 630  # yard 초기 위치로 복귀
+                if key and key.attached:
+                    key.detach()
+                    key.x, key.y = 1070, 570  # yard 초기 위치로 복귀
+                if broom and broom.attached:
+                    broom.detach()
+                    broom.x, broom.y = 520, 490  # yard 초기 위치로 복귀
 
 
         else:
