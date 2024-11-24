@@ -73,7 +73,7 @@ def init():
     if not key:
         key = Key()
         game_world.add_object(key, 1)
-    key.current_map = "bedroom"  # 현재 맵 설정
+
 
     # Duster 초기화
     duster = game_world.get_object_by_class(Duster)
@@ -107,11 +107,20 @@ def init():
 
 
 def draw():
-    global image, door, key
+    global image, door, broom, mop, duster, key
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
-    door.draw(door_x, door_y)  # 첫 번째 문 그리기
-    key.draw()
+    door.draw(door_x, door_y)  # 문 그리기
+
+    # 각 객체의 current_map을 기준으로 그리기
+    if broom:
+        broom.draw()
+    if mop:
+        mop.draw()
+    if duster:
+        duster.draw()
+    if key:
+        key.draw()
 
     for web, x, y in web_list:
         web.draw(x,y)

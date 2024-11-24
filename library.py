@@ -106,11 +106,20 @@ def init():
 
 
 def draw():
-    global image, door, duster
+    global image, door, broom, mop, duster, key
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
-    door.draw(door_x, door_y)  # 첫 번째 문 그리기
-    duster.draw()
+    door.draw(door_x, door_y)  # 문 그리기
+
+    # 각 객체의 current_map을 기준으로 그리기
+    if broom:
+        broom.draw()
+    if mop:
+        mop.draw()
+    if duster:
+        duster.draw()
+    if key:
+        key.draw()
 
     for web, x, y in web_list:
         web.draw(x,y)

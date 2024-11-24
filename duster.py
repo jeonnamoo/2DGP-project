@@ -31,6 +31,9 @@ class Duster:
             self.x, self.y = self.girl.x, self.girl.y
 
     def draw(self):
-        # 현재 맵에서만 그리기
-        if self.current_map == game_framework.current_map and not self.attached:
+        # 부착되어 있다면 항상 보임
+        if self.attached:
+            self.image.draw(self.x, self.y)
+        # 부착되지 않았다면 특정 맵에서만 보임
+        elif self.current_map == game_framework.current_map:
             self.image.draw(self.x, self.y)
