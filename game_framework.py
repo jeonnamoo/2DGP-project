@@ -4,13 +4,16 @@ stack = None
 
 
 
+current_map = None  # 현재 맵을 추적할 전역 변수
+
 def change_mode(mode):
-    global stack
+    global stack, current_map
     if stack:
-        stack[-1].finish()  # 현재 모드 종료
+        stack[-1].finish()
         stack.pop()
     stack.append(mode)
     mode.init()
+    current_map = mode  # 맵을 변경할 때 현재 맵 업데이트
 
 
 

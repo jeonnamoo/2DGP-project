@@ -24,7 +24,10 @@ can_list = []
 stain_list = []
 
 door = None
+broom = None
+mop = None
 key = None
+duster = None
 door_x, door_y = 244, 248  # 문 위치
 key_x, key_y = 1070, 570
 width, height = 1440, 960  # Yard 크기
@@ -55,14 +58,34 @@ def init():
 
     girl.x, girl.y = 244, 248  # 초기 위치
 
+    broom = game_world.get_object_by_class(Broom)
+    if not broom:
+        broom = Broom(width=32, height=32)
+        game_world.add_object(broom, 1)
+    mop = game_world.get_object_by_class(Mop)
+    if not mop:
+        mop = Mop()
+        game_world.add_object(mop, 1)
+    mop.current_map = "basement"  # 현재 맵 설정
 
-
+    # Key 초기화
     key = game_world.get_object_by_class(Key)
     if not key:
-        key = Key(width=32, height=32)
+        key = Key()
         game_world.add_object(key, 1)
+    key.current_map = "bedroom"  # 현재 맵 설정
+
+    # Duster 초기화
+    duster = game_world.get_object_by_class(Duster)
+    if not duster:
+        duster = Duster()
+        game_world.add_object(duster, 1)
+    duster.current_map = "library"  # 현재 맵 설정
 
     key.current_map = "bedroom"  # 현재 맵을 yard로 설정
+
+    if not key.attached:
+        key.x, key.y = 1070, 570  # broom 초기 위치
 
     for _ in range(10):
         x = random.randint(web_x_min, web_x_max)
@@ -88,7 +111,7 @@ def draw():
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 첫 번째 문 그리기
-    key.draw(key_x, key_y)
+    key.draw()
 
     for web, x, y in web_list:
         web.draw(x,y)

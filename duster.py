@@ -1,5 +1,8 @@
 from pico2d import *
 
+import game_framework
+
+
 class Duster:
     image = None
 
@@ -28,7 +31,6 @@ class Duster:
             self.x, self.y = self.girl.x, self.girl.y
 
     def draw(self):
-        if self.attached:  # 부착된 상태일 경우 현재 위치에 그림
-            self.image.draw_to_origin(self.x - self.width // 2, self.y - self.height // 2, self.width, self.height)
-        elif self.current_map == "library":  # yard일 경우 초기 위치에 그림
-            self.image.draw_to_origin(720 - self.width // 2, 630 - self.height // 2, self.width, self.height)
+        # 현재 맵에서만 그리기
+        if self.current_map == game_framework.current_map and not self.attached:
+            self.image.draw(self.x, self.y)

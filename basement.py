@@ -21,7 +21,10 @@ can_list = []
 stain_list = []
 
 door = None
+broom = None
 mop = None
+key = None
+duster = None
 
 door_x, door_y = 420, 770  # 문 위치
 width, height = 1440, 960  # Yard 크기
@@ -38,6 +41,11 @@ can_y_min, can_y_max = 210, 760
 stain_x_min, stain_x_max = 270, 1180
 stain_y_min, stain_y_max = 210, 760
 
+def enter():
+    global mop
+    if mop:
+        mop.current_map = "basement"  # basement로 이동 시 mop 활성화
+
 def init():
     global image, door, girl, mop, broom,key, duster, web_list, can_list, stain_list
     image = load_image('basement.png')  # 배경 이미지 로드
@@ -50,17 +58,37 @@ def init():
         girl = Girl()
         game_world.add_object(girl, 2)
 
-
-
+    broom = game_world.get_object_by_class(Broom)
+    if not broom:
+        broom = Broom(width=32, height=32)
+        game_world.add_object(broom, 1)
     mop = game_world.get_object_by_class(Mop)
     if not mop:
-        mop = Mop(width=32, height=32)
+        mop = Mop()
         game_world.add_object(mop, 1)
+    mop.current_map = "basement"  # 현재 맵 설정
+
+    # Key 초기화
+    key = game_world.get_object_by_class(Key)
+    if not key:
+        key = Key()
+        game_world.add_object(key, 1)
+    key.current_map = "bedroom"  # 현재 맵 설정
+
+    # Duster 초기화
+    duster = game_world.get_object_by_class(Duster)
+    if not duster:
+        duster = Duster()
+        game_world.add_object(duster, 1)
+    duster.current_map = "library"  # 현재 맵 설정
 
 
     mop.current_map = "basement"  # 현재 맵 설정
 
     girl.x, girl.y = 420, 770  # 초기 위치
+
+    if not mop.attached:
+        mop.x, mop.y = 1100, 300  # broom 초기 위치
 
 
 

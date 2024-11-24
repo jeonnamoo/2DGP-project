@@ -13,13 +13,20 @@ from key import Key
 
 image = None
 door = None
-broom = None
+
 door_x, door_y = 720, 550  # 문 위치
 width, height = 1440, 960  # Yard 크기
 broom_x, broom_y = 520, 490
 girl = None
+broom = None
+mop = None
+key = None
+duster = None
 
-
+def enter():
+    global mop
+    mop = Mop(x=200, y=200)
+    mop.current_map = "yard"  # mop은 yard 맵에만 표시
 
 def init():
     global image, door, girl, broom, mop, duster, key
@@ -36,6 +43,25 @@ def init():
     if not broom:
         broom = Broom(width=32, height=32)
         game_world.add_object(broom, 1)
+    mop = game_world.get_object_by_class(Mop)
+    if not mop:
+        mop = Mop()
+        game_world.add_object(mop, 1)
+    mop.current_map = "basement"  # 현재 맵 설정
+
+    # Key 초기화
+    key = game_world.get_object_by_class(Key)
+    if not key:
+        key = Key()
+        game_world.add_object(key, 1)
+    key.current_map = "bedroom"  # 현재 맵 설정
+
+    # Duster 초기화
+    duster = game_world.get_object_by_class(Duster)
+    if not duster:
+        duster = Duster()
+        game_world.add_object(duster, 1)
+    duster.current_map = "library"  # 현재 맵 설정
 
 
     broom.current_map = "yard"  # 현재 맵을 yard로 설정

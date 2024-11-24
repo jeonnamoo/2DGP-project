@@ -21,6 +21,9 @@ can_list = []
 stain_list = []
 
 door = None
+broom = None
+mop = None
+key = None
 duster = None
 door_x, door_y =700 , 190  # 문 위치
 duster_x, duster_y = 720, 630
@@ -50,11 +53,29 @@ def init():
         girl = Girl()
         game_world.add_object(girl, 2)
 
+    broom = game_world.get_object_by_class(Broom)
+    if not broom:
+        broom = Broom(width=32, height=32)
+        game_world.add_object(broom, 1)
+    mop = game_world.get_object_by_class(Mop)
+    if not mop:
+        mop = Mop()
+        game_world.add_object(mop, 1)
+    mop.current_map = "basement"  # 현재 맵 설정
 
+    # Key 초기화
+    key = game_world.get_object_by_class(Key)
+    if not key:
+        key = Key()
+        game_world.add_object(key, 1)
+    key.current_map = "bedroom"  # 현재 맵 설정
+
+    # Duster 초기화
     duster = game_world.get_object_by_class(Duster)
     if not duster:
-        duster = Duster(width=32, height=32)
+        duster = Duster()
         game_world.add_object(duster, 1)
+    duster.current_map = "library"  # 현재 맵 설정
 
 
 
@@ -79,6 +100,9 @@ def init():
         y = random.randint(stain_y_min, stain_y_max)
         stain = Stain()
         stain_list.append((stain,x,y))
+
+    if not duster.attached:
+        duster.x, duster.y = 720, 630  # broom 초기 위치
 
 
 def draw():
@@ -146,11 +170,7 @@ def update():
 
 
 def pause(): pass
-
-
 def resume(): pass
-
-
 def finish():
     global image, door,  web_list, can_list, stain_list
     del image
