@@ -62,6 +62,8 @@ def init():
     if not broom:
         broom = Broom(width=32, height=32)
         game_world.add_object(broom, 1)
+        
+    broom.current_map = "livingroom"  # 현재 맵을 livingroom으로 설정
 
     # 마지막 사용된 문에 따라 초기 위치 설정
     if last_used_door and last_used_door in door_positions:

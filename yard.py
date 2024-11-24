@@ -35,7 +35,7 @@ def init():
         broom = Broom(width=32, height=32)
         game_world.add_object(broom, 1)
 
-
+    broom.current_map = "yard"  # 현재 맵을 yard로 설정
 
     girl.x, girl.y = 720, 550  # 초기 위치
 
