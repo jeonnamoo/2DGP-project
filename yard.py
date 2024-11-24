@@ -20,7 +20,7 @@ broom_attached = False
 
 
 def init():
-    global image, door, girl, broom, broom_attached
+    global image, door, girl, broom
     image = load_image('yard.png')  # 배경 이미지 로드
     door = Door(width=32, height=32)  # 문 크기 설정
 
@@ -39,8 +39,9 @@ def init():
 
     girl.x, girl.y = 720, 550  # 초기 위치
 
-    if not broom_attached:
-        broom.x, broom.y = broom_x, broom_y
+    if not broom.attached:
+        broom.x, broom.y = 520, 490  # broom 초기 위치
+
 
 def draw():
     global image, door,broom, broom_attached
@@ -55,7 +56,7 @@ def draw():
     update_canvas()
 
 def handle_events():
-    global girl, door, broom, broom_attached
+    global girl, door, broom
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -68,9 +69,8 @@ def handle_events():
             if distance <= 30:  # 문 근처(거리 50 이하)일 때만 Livingroom으로 전환
                 game_framework.change_mode(livingroom)
             distance_to_broom = ((girl.x - broom.x) ** 2 + (girl.y - broom.y) ** 2) ** 0.5
-            if distance_to_broom <= 30 and not broom_attached:  # broom 근처에서 space를 눌렀을 때
-                broom_attached = True  # broom이 girl에 붙음
-                broom.x, broom.y = girl.x, girl.y  # broom 위치를 girl 위치로 설정
+            if distance_to_broom <= 30 and not broom.attached:
+                broom.attach(girl)  # broom을 girl에 부착
 
 
         else:
@@ -78,13 +78,10 @@ def handle_events():
                 girl.handle_event(event)
 
 def update():
-    global girl, broom, broom_attached
+    global girl
     if girl:  # girl 객체가 존재할 경우에만 실행
         girl.x = max(500, min(820, girl.x))  # x축 이동 범위 제한
         girl.y = max(475, min(530, girl.y))  # y축 이동 범위 제한
-    if broom_attached:
-        broom.x, broom.y = girl.x, girl.y
-
 
     game_world.update()  # 다른 객체들도 업데이트
 

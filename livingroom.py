@@ -13,6 +13,7 @@ from girl import Girl
 from web import Web
 from can import Can
 from stain import Stain
+from broom import Broom
 
 image = None
 
@@ -48,7 +49,7 @@ stain_y_min, stain_y_max = 150, 810
 
 
 def init():
-    global image, doors, girl, last_used_door, web_list, can_list, stain_list
+    global image, doors, girl, last_used_door, web_list, can_list, stain_list, broom, broom_attached
     image = load_image('livingroom.png')  # 배경 이미지 로드
     doors = [Door(), Door(), Door(), Door()]  # 문 생성
 
@@ -57,11 +58,19 @@ def init():
         girl = Girl()
         game_world.add_object(girl, 2)
 
+    broom = game_world.get_object_by_class(Broom)
+    if not broom:
+        broom = Broom(width=32, height=32)
+        game_world.add_object(broom, 1)
+
     # 마지막 사용된 문에 따라 초기 위치 설정
     if last_used_door and last_used_door in door_positions:
         girl.x, girl.y = door_positions[last_used_door]
     else:  # 기본 위치
         girl.x, girl.y = 820, 300
+
+    if broom.attached:
+        broom.x, broom.y = girl.x, girl.y  # broom 위치 동기화
 
     for _ in range(10):
         x = random.randint(web_x_min, web_x_max)
@@ -127,9 +136,14 @@ def handle_events():
                 girl.handle_event(event)
 
 def update():
+    global girl, broom, broom_attached
     if girl:
         girl.x = max(200, min(1290, girl.x))  # x축 이동 범위 제한
         girl.y = max(150, min(810, girl.y))  # y축 이동 범위 제한
+    if game_framework.broom_attached:
+        broom.x, broom.y = girl.x, girl.y
+    game_world.update()
+
     game_world.update()
 
 def finish():
