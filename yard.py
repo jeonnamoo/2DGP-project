@@ -43,10 +43,11 @@ def init():
         broom.x, broom.y = broom_x, broom_y
 
 def draw():
-    global image, door, broom_attached
+    global image, door,broom, broom_attached
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 문 그리기
+
     if not broom_attached:
         broom.draw()
     game_world.render()
