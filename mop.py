@@ -31,9 +31,6 @@ class Mop:
             self.x, self.y = self.girl.x, self.girl.y
 
     def draw(self):
-        # 부착되어 있다면 항상 보임
-        if self.attached:
-            self.image.draw(self.x, self.y)
-        # 부착되지 않았다면 특정 맵에서만 보임
-        elif self.current_map == game_framework.current_map:
-            self.image.draw(self.x, self.y)
+       
+        if self.attached or self.current_map == "basement":  # yard이거나 부착된 경우만 그림
+            self.image.draw_to_origin(self.x - self.width // 2, self.y - self.height // 2, self.width, self.height)
