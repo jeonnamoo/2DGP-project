@@ -8,12 +8,12 @@ class Mop:
 
     def __init__(self, width=40, height=50, scale=3):
         if Mop.image is None:
-            Mop.image = load_image('mop.png')  # Mop 이미지 로드
+            Mop.image = load_image('mop.png')  # Broom 이미지 로드
         self.width, self.height = width * scale, height * scale
-        self.x, self.y = 1100, 300  # basement 초기 위치
-        self.attached = False  # mop이 girl에 부착되었는지 상태 관리
+        self.x, self.y = 520, 490  # 초기 위치 설정 (yard의 위치)
+        self.attached = False  # broom이 girl에 부착되었는지 상태 관리
         self.girl = None  # 부착된 대상
-        self.current_map = "basement"  # 기본 맵을 basement로 설정
+        self.current_map = "basement"  # 기본 맵을 yard로 설정
 
     def attach(self, girl):
         """mop을 girl에 부착"""
@@ -27,10 +27,10 @@ class Mop:
 
     def update(self):
         """부착된 상태일 경우 girl의 위치를 따라감"""
-        if self.attached and self.girl:
+        if self.current_map == "basement" and self.attached and self.girl:
             self.x, self.y = self.girl.x, self.girl.y
 
     def draw(self):
-        """Draw mop only if it's in the basement."""
-        if self.current_map == "basement":  # basement일 경우만 그림
+        """broom을 현재 위치에 그리기"""
+        if self.attached or self.current_map == "basement":  # yard이거나 부착된 경우만 그림
             self.image.draw_to_origin(self.x - self.width // 2, self.y - self.height // 2, self.width, self.height)

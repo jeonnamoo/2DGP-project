@@ -6,7 +6,7 @@ import game_framework
 class Key:
     image = None
 
-    def __init__(self, width=40, height=50, scale=4):
+    def __init__(self, width=40, height=50, scale=3):
         if Key.image is None:
             Key.image = load_image('key.png')  # Broom 이미지 로드
         self.width, self.height = width * scale, height * scale
@@ -31,9 +31,6 @@ class Key:
             self.x, self.y = self.girl.x, self.girl.y
 
     def draw(self):
-        # 부착되어 있다면 항상 보임
-        if self.attached:
-            self.image.draw(self.x, self.y)
-        # 부착되지 않았다면 특정 맵에서만 보임
-        elif self.current_map == game_framework.current_map:
-            self.image.draw(self.x, self.y)
+        """broom을 현재 위치에 그리기"""
+        if self.attached or self.current_map == "bedroom":  # yard이거나 부착된 경우만 그림
+            self.image.draw_to_origin(self.x - self.width // 2, self.y - self.height // 2, self.width, self.height)

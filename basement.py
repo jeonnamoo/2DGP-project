@@ -44,30 +44,26 @@ stain_y_min, stain_y_max = 210, 760
 
 
 def init():
-    global image, door, girl, mop, broom,key, duster, web_list, can_list, stain_list
+    global image, door, girl, mop,  web_list, can_list, stain_list
     image = load_image('basement.png')  # 배경 이미지 로드
     door = Door(width=32, height=32)  # 첫 번째 문 크기 설정
-    mop = Mop(width=32, height=32)
 
-
-    girl = game_world.get_object_by_class(Girl)  # 기존 girl 객체 가져오기
-    if not girl:  # girl 객체가 없으면 새로 생성
-        girl = Girl()
-        game_world.add_object(girl, 2)
-
-
-
-        # mop을 basement에서만 생성
+    # Mop 초기화
     mop = game_world.get_object_by_class(Mop)
-    if not mop:
+    if not mop:  # 이미 존재하지 않는 경우에만 생성
         mop = Mop()
         game_world.add_object(mop, 1)
-    mop.current_map = "basement"  # Mop의 맵을 basement로 설정
+    mop.current_map = "basement"  # 현재 맵 설정
+    mop.x, mop.y = 1100, 300  # 초기 위치
 
+    # Girl 초기화
+    girl = game_world.get_object_by_class(Girl)
+    if not girl:
+        girl = Girl()
+        game_world.add_object(girl, 2)
     girl.x, girl.y = 420, 770  # 초기 위치
 
-    if not mop.attached:
-        mop.x, mop.y = 1100, 300  # broom 초기 위치
+
 
 
 
@@ -88,13 +84,14 @@ def init():
         y = random.randint(stain_y_min, stain_y_max)
         stain = Stain()
         stain_list.append((stain,x,y))
-    if mop.attached:
-        mop.x, mop.y = girl.x, girl.y
+
+
+
 
 
 
 def draw():
-    global image, door, broom, mop, duster, key
+    global image, door,  mop
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 문 그리기
@@ -129,6 +126,7 @@ def handle_events():
             distance1 = ((girl.x - door_x) ** 2 + (girl.y - door_y) ** 2) ** 0.5
             if distance1 <= 30:  # 문 근처(거리 30 이하)
                 game_framework.change_mode(kitchen)
+
              # Girl과 Mop 사이의 거리 계산
             distance_to_mop = ((girl.x - mop.x) ** 2 + (girl.y - mop.y) ** 2) ** 0.5
             if distance_to_mop <= 30 and not mop.attached:
@@ -144,11 +142,13 @@ def handle_events():
 
 
 def update():
-    global girl
+    global girl, mop
     if girl:  # girl 객체가 존재할 경우에만 실행
         girl.x = max(270, min(1180, girl.x))  # x축 이동 범위 제한
         girl.y = max(210, min(760, girl.y))  # y축 이동 범위 제한
+
     game_world.update()  # 다른 객체들도 업데이트
+
 
 
 def pause(): pass
@@ -156,10 +156,13 @@ def pause(): pass
 def resume(): pass
 
 def finish():
-    global image, door, web_list, can_list, stain_list
+    global image, door, web_list, can_list, stain_list, mop
     del image
     del door
     web_list.clear()
     can_list.clear()
     stain_list.clear()
+
+    mop.current_map = None
+
 

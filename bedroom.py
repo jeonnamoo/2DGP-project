@@ -45,7 +45,7 @@ stain_y_min, stain_y_max = 250, 610
 
 
 def init():
-    global image, door, girl, key,duster, broom, mop, web_list, can_list, stain_list
+    global image, door, girl, key,duster, broom,  web_list, can_list, stain_list
     image = load_image('bedroom.png')  # 배경 이미지 로드
     door = Door(width=32, height=32)  # 첫 번째 문 크기 설정
     key = Key(width=32, height =32)
@@ -58,31 +58,13 @@ def init():
 
     girl.x, girl.y = 244, 248  # 초기 위치
 
-    broom = game_world.get_object_by_class(Broom)
-    if not broom:
-        broom = Broom(width=32, height=32)
-        game_world.add_object(broom, 1)
-    mop = game_world.get_object_by_class(Mop)
-    if not mop:
-        mop = Mop()
-        game_world.add_object(mop, 1)
-    mop.current_map = "basement"  # 현재 맵 설정
-
-    # Key 초기화
+    # Key 객체 초기화
     key = game_world.get_object_by_class(Key)
     if not key:
-        key = Key()
+        key = Key()  # Key 생성
         game_world.add_object(key, 1)
-
-
-    # Duster 초기화
-    duster = game_world.get_object_by_class(Duster)
-    if not duster:
-        duster = Duster()
-        game_world.add_object(duster, 1)
-    duster.current_map = "library"  # 현재 맵 설정
-
-    key.current_map = "bedroom"  # 현재 맵을 yard로 설정
+    key.current_map = "bedroom"  # 현재 맵 설정
+    key.x, key.y = 1070, 570  # Key 초기 위치
 
     if not key.attached:
         key.x, key.y = 1070, 570  # broom 초기 위치
@@ -107,20 +89,13 @@ def init():
 
 
 def draw():
-    global image, door, broom, mop, duster, key
+    global image, door, broom,  duster, key
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 문 그리기
 
     # 각 객체의 current_map을 기준으로 그리기
-    if broom:
-        broom.draw()
-    if mop:
-        mop.draw()
-    if duster:
-        duster.draw()
-    if key:
-        key.draw()
+    key.draw()
 
     for web, x, y in web_list:
         web.draw(x,y)
@@ -152,19 +127,10 @@ def handle_events():
             distance_to_key = ((girl.x - key.x) ** 2 + (girl.y - key.y) ** 2) ** 0.5
             if distance_to_key <= 30 and not key.attached:
                 key.attach(girl)  # broom을 girl에 부착
-                if mop and mop.attached:
-                    mop.detach()
-                    mop.x, mop.y = 110, 300  # yard 초기 위치로 복귀
-                if duster and duster.attached:
-                    duster.detach()
-                    duster.x, duster.y = 720, 630  # yard 초기 위치로 복귀
+
                 if key and key.attached:
                     key.detach()
                     key.x, key.y = 1070, 570  # yard 초기 위치로 복귀
-                if broom and broom.attached:
-                    broom.detach()
-                    broom.x, broom.y = 520, 490  # yard 초기 위치로 복귀
-
 
         else:
             if girl:
@@ -186,11 +152,13 @@ def resume(): pass
 
 
 def finish():
-    global image, door, web_list, can_list, stain_list
+    global image, door, web_list, can_list, stain_list, key
     del image
     del door
     web_list.clear()
     can_list.clear()
     stain_list.clear()
+
+    key.current_map = None
 
 

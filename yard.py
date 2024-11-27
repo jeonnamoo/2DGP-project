@@ -42,21 +42,6 @@ def init():
         game_world.add_object(broom, 1)
 
 
-    # Key 초기화
-    key = game_world.get_object_by_class(Key)
-    if not key:
-        key = Key()
-        game_world.add_object(key, 1)
-    key.current_map = "bedroom"  # 현재 맵 설정
-
-    # Duster 초기화
-    duster = game_world.get_object_by_class(Duster)
-    if not duster:
-        duster = Duster()
-        game_world.add_object(duster, 1)
-    duster.current_map = "library"  # 현재 맵 설정
-
-
     broom.current_map = "yard"  # 현재 맵을 yard로 설정
 
     girl.x, girl.y = 720, 550  # 초기 위치
@@ -93,12 +78,7 @@ def handle_events():
             if distance_to_broom <= 30 and not broom.attached:
                 broom.attach(girl)  # broom을 girl에 부착
 
-                if duster and duster.attached:
-                    duster.detach()
-                    duster.x, duster.y = 720, 630  # yard 초기 위치로 복귀
-                if key and key.attached:
-                    key.detach()
-                    key.x, key.y = 1070, 570  # yard 초기 위치로 복귀
+
                 if broom and broom.attached:
                     broom.detach()
                     broom.x, broom.y = 520, 490  # yard 초기 위치로 복귀
