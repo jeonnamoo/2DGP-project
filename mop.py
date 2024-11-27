@@ -31,6 +31,6 @@ class Mop:
             self.x, self.y = self.girl.x, self.girl.y
 
     def draw(self):
-       
-        if self.attached or self.current_map == "basement":  # yard이거나 부착된 경우만 그림
+        """Draw mop only if it's in the basement."""
+        if self.current_map == "basement":  # basement일 경우만 그림
             self.image.draw_to_origin(self.x - self.width // 2, self.y - self.height // 2, self.width, self.height)

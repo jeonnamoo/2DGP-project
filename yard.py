@@ -23,10 +23,7 @@ mop = None
 key = None
 duster = None
 
-def enter():
-    global mop
-    mop = Mop(x=200, y=200)
-    mop.current_map = "yard"  # mop은 yard 맵에만 표시
+
 
 def init():
     global image, door, girl, broom, mop, duster, key
@@ -43,11 +40,7 @@ def init():
     if not broom:
         broom = Broom(width=32, height=32)
         game_world.add_object(broom, 1)
-    mop = game_world.get_object_by_class(Mop)
-    if not mop:
-        mop = Mop()
-        game_world.add_object(mop, 1)
-    mop.current_map = "basement"  # 현재 맵 설정
+
 
     # Key 초기화
     key = game_world.get_object_by_class(Key)
@@ -99,9 +92,7 @@ def handle_events():
             distance_to_broom = ((girl.x - broom.x) ** 2 + (girl.y - broom.y) ** 2) ** 0.5
             if distance_to_broom <= 30 and not broom.attached:
                 broom.attach(girl)  # broom을 girl에 부착
-                if mop and mop.attached:
-                    mop.detach()
-                    mop.x, mop.y = 110, 300  # yard 초기 위치로 복귀
+
                 if duster and duster.attached:
                     duster.detach()
                     duster.x, duster.y = 720, 630  # yard 초기 위치로 복귀
