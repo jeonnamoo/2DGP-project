@@ -1,6 +1,7 @@
 world = [[], [], [], []]  # 레이어: 0 = 배경, 1 = 문, 2 = 캐릭터, 3 = UI 등
 
 
+
 def add_object(o, depth = 0):
     world[depth].append(o)
 
