@@ -128,12 +128,14 @@ def handle_events():
                 game_framework.change_mode(kitchen)
 
              # Girl과 Mop 사이의 거리 계산
-            distance_to_mop = ((girl.x - mop.x) ** 2 + (girl.y - mop.y) ** 2) ** 0.5
-            if distance_to_mop <= 30 and not mop.attached:
-                mop.attach(girl)  # mop 부착
-                if mop and mop.attached:
-                    mop.detach()
-                    mop.x, mop.y = 110, 300  # yard 초기 위치로 복귀
+            if mop:  # Mop 객체가 존재할 경우만 처리
+                distance_to_mop = ((girl.x - mop.x) ** 2 + (girl.y - mop.y) ** 2) ** 0.5
+                if distance_to_mop <= 50:  # 충돌 판정 거리
+                    if not mop.attached:
+                        mop.attach(girl)  # Mop 부착
+                    else:
+                        mop.detach()  # Mop 분리
+                        mop.x, mop.y = 1100, 300  # 초기 위치 복귀
 
 
         else:

@@ -6,7 +6,7 @@ import game_framework
 class Mop:
     image = None
 
-    def __init__(self, width=40, height=50, scale=3):
+    def __init__(self, width=40, height=50, scale=2):
         if Mop.image is None:
             Mop.image = load_image('mop.png')  # Broom 이미지 로드
         self.width, self.height = width * scale, height * scale
