@@ -16,6 +16,7 @@ from stain import Stain
 from broom import Broom
 from duster import Duster
 from mop import Mop
+from key import Key
 
 image = None
 
@@ -23,6 +24,8 @@ web_list = []
 can_list = []
 stain_list = []
 doors  = []
+
+key_required = True
 
 # 문 위치
 door_positions = {
@@ -135,7 +138,7 @@ def draw():
 
 
 def handle_events():
-    global girl, can_list, stain_list, web_list, broom, duster, mop, last_used_door
+    global girl, can_list, stain_list, web_list, broom, duster, mop, last_used_door, key_required
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -176,7 +179,15 @@ def handle_events():
                     elif door_name == 'door3':
                         game_framework.change_mode(bedroom)
                     elif door_name == 'door4':
-                        game_framework.change_mode(library)
+                        if key_required:
+                            # Key가 부착되어 있어야만 이동 가능
+                            if isinstance(girl.item, Key):
+                                key_required = False  # 이후에는 key 없이 이동 가능
+                                game_framework.change_mode(library)
+                            else:
+                                print("Key가 필요합니다!")  # Key가 없는 경우 경고 메시지 출력
+                        else:
+                            game_framework.change_mode(library) 
         else:
             if girl:
                 girl.handle_event(event)
