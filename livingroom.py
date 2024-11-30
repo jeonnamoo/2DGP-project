@@ -74,46 +74,49 @@ def init():
     if broom.attached:
         broom.x, broom.y = girl.x, girl.y  # broom 위치 동기화
 
+    # Web, Can, Stain 오브젝트 생성
     for _ in range(10):
         x = random.randint(web_x_min, web_x_max)
         y = random.randint(web_y_min, web_y_max)
         web = Web()
-        web_list.append((web,x,y))
+        web_list.append((web, x, y))
 
     for _ in range(10):
         x = random.randint(can_x_min, can_x_max)
         y = random.randint(can_y_min, can_y_max)
-        can = Can()
-        can_list.append((can,x,y))
+        can = Can(x, y)  # x와 y 전달
+        can_list.append((can, x, y))
 
     for _ in range(10):
         x = random.randint(stain_x_min, stain_x_max)
         y = random.randint(stain_y_min, stain_y_max)
         stain = Stain()
-        stain_list.append((stain,x,y))
+        stain_list.append((stain, x, y))
+
 
 def draw():
     global image, doors
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)
+
     for i, door in enumerate(doors):
         door.draw(*door_positions[f'door{i + 1}'])
 
     for web, x, y in web_list:
-        web.draw(x,y)
+        web.draw(x, y)
 
     for can, x, y in can_list:
-        can.draw(x,y)
+        can.draw()  # 인자 없이 호출
 
     for stain, x, y in stain_list:
-        stain.draw(x,y)
-
+        stain.draw(x, y)
 
     game_world.render()
     update_canvas()
 
+
 def handle_events():
-    global girl, last_used_door
+    global girl, can_list, broom
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -121,6 +124,14 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+            # Can과의 거리 계산 및 상호작용
+            for can, x, y in can_list:
+                distance_to_can = ((girl.x - can.x) ** 2 + (girl.y - can.y) ** 2) ** 0.5
+                if broom.attached and not can.removed and distance_to_can <= 30:
+                    can.activate_trash()  # Trash 애니메이션 시작
+                    return  # 다른 동작보다 우선 처리
+
+            # Door와의 거리 계산
             for door_name, position in door_positions.items():
                 distance = ((girl.x - position[0]) ** 2 + (girl.y - position[1]) ** 2) ** 0.5
                 if distance <= 30:
@@ -136,6 +147,7 @@ def handle_events():
         else:
             if girl:
                 girl.handle_event(event)
+
 
 def update():
     global girl, broom
