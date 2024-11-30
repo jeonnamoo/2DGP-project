@@ -59,4 +59,3 @@ def get_object_by_class(cls):
             if isinstance(o, cls):
                 return o
     return None
-

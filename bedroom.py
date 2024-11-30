@@ -205,5 +205,3 @@ def finish():
 
 
     key.current_map = None
-
-

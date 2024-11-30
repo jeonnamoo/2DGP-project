@@ -204,5 +204,3 @@ def finish():
 
 
     mop.current_map = None
-
-

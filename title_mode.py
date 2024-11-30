@@ -1,10 +1,11 @@
 from pico2d import load_image, get_events, clear_canvas, update_canvas
-from sdl2 import SDL_QUIT, SDL_KEYDOWN, SDLK_ESCAPE, SDLK_SPACE
+from sdl2 import SDL_QUIT, SDL_KEYDOWN, SDLK_ESCAPE, SDLK_SPACE, SDLK_i
 
 import game_framework
 import game_world
 import play_mode
 import yard
+
 from gage import Gage
 
 gage_object = None  # gage 객체 초기화
@@ -34,6 +35,7 @@ def handle_events():
                     gage_object = Gage()  # gage 생성
                     game_world.add_object(gage_object, 3)  # UI 레이어에 추가
                 game_framework.change_mode(yard)  # yard로 전환
+
 
 def draw():
     global gage_object

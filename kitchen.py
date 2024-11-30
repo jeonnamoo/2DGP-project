@@ -184,4 +184,3 @@ def finish():
     del image
     del door1
     del door2
-
