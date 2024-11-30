@@ -70,44 +70,49 @@ def init():
     if not key.attached:
         key.x, key.y = 1070, 570  # broom 초기 위치
 
-    for _ in range(10):
-        x = random.randint(web_x_min, web_x_max)
-        y = random.randint(web_y_min, web_y_max)
-        web = Web()
-        web_list.append((web,x,y))
+    if not web_list:
+        for _ in range(10):
+            x = random.randint(web_x_min, web_x_max)
+            y = random.randint(web_y_min, web_y_max)
+            web = Web(x, y)  # x, y 전달
+            web_list.append((web, x, y))
 
-    for _ in range(10):
-        x = random.randint(can_x_min, can_x_max)
-        y = random.randint(can_y_min, can_y_max)
-        can = Can()
-        can_list.append((can,x,y))
+    if not can_list:
+        for _ in range(10):
+            x = random.randint(can_x_min, can_x_max)
+            y = random.randint(can_y_min, can_y_max)
+            can = Can(x, y)
+            can_list.append((can, x, y))
 
-    for _ in range(10):
-        x = random.randint(stain_x_min, stain_x_max)
-        y = random.randint(stain_y_min, stain_y_max)
-        stain = Stain()
-        stain_list.append((stain,x,y))
+    if not stain_list:
+        for _ in range(10):
+            x = random.randint(stain_x_min, stain_x_max)
+            y = random.randint(stain_y_min, stain_y_max)
+            stain = Stain(x, y)  # x와 y 전달
+            stain_list.append((stain, x, y))
 
 
 def draw():
-    global image, door, broom,  duster, key, attached_key
+    global image, door, broom,  duster, key
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 문 그리기
 
     # 각 객체의 current_map을 기준으로 그리기
-    key.draw()  # 기존 key 그리기
-    if attached_key:  # 새로운 key가 생성되었다면 그리기
-        attached_key.draw()
+    # girl 및 부착된 물체 렌더링
+    if girl:
+        girl.draw()
+        if girl.item:  # 부착된 아이템이 있을 경우 렌더링
+            girl.item.draw()
 
     for web, x, y in web_list:
-        web.draw(x,y)
+        web.draw()
 
     for can, x, y in can_list:
-        can.draw(x,y)
+        can.draw()
 
     for stain, x, y in stain_list:
-        stain.draw(x,y)
+        stain.draw()
 
 
     game_world.render()
@@ -115,7 +120,7 @@ def draw():
 
 
 def handle_events():
-    global girl, door, broom, mop, duster, key, attached_key
+    global girl, door, broom, mop, duster, key, can_list, stain_list, web_list, broom, duster, mop
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -123,6 +128,26 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+            for can, x, y in can_list:
+                distance_to_can = ((girl.x - can.x) ** 2 + (girl.y - can.y) ** 2) ** 0.5
+                if isinstance(girl.item, Broom) and not can.removed and distance_to_can <= 30:
+                    can.activate_trash()
+                    return
+
+            # Stain과의 상호작용
+            for stain, x, y in stain_list:
+                distance_to_stain = ((girl.x - stain.x) ** 2 + (girl.y - stain.y) ** 2) ** 0.5
+                if isinstance(girl.item, Mop) and not stain.removed and distance_to_stain <= 30:
+                    stain.activate_water()
+                    return
+
+            # Web과의 상호작용
+            for web, x, y in web_list:
+                distance_to_web = ((girl.x - web.x) ** 2 + (girl.y - web.y) ** 2) ** 0.5
+                if isinstance(girl.item, Duster) and not web.removed and distance_to_web <= 30:
+                    web.activate_dust()
+                    return
+
             # 첫 번째 문 근처에서 눌렀을 경우
             distance1 = ((girl.x - door_x) ** 2 + (girl.y - door_y) ** 2) ** 0.5
             if distance1 <= 30:  # 문 근처(거리 30 이하)
@@ -143,6 +168,13 @@ def update():
     if girl:  # girl 객체가 존재할 경우에만 실행
         girl.x = max(150, min(1290, girl.x))  # x축 이동 범위 제한
         girl.y = max(250, min(610, girl.y))  # y축 이동 범위 제한
+    for can, x, y in can_list:
+        can.update()  # Can 애니메이션 업데이트
+
+    for stain, x, y in stain_list:
+        stain.update()  # Stain 애니메이션 업데이트
+    for web, x, y in web_list:
+        web.update()
     game_world.update()  # 다른 객체들도 업데이트
 
 
@@ -153,12 +185,10 @@ def resume(): pass
 
 
 def finish():
-    global image, door, web_list, can_list, stain_list, key
+    global image, door
     del image
     del door
-    web_list.clear()
-    can_list.clear()
-    stain_list.clear()
+
 
     key.current_map = None
 

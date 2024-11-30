@@ -135,7 +135,7 @@ def draw():
 
 
 def handle_events():
-    global girl, can_list, stain_list, web_list
+    global girl, can_list, stain_list, web_list, broom, duster, mop, last_used_door
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
