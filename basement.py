@@ -133,12 +133,13 @@ def handle_events():
             # Mop 근처 거리 계산
             distance_to_mop = ((girl.x - mop.x) ** 2 + (girl.y - mop.y) ** 2) ** 0.5
             if distance_to_mop <= 30:
-                # mop 부착 (새로운 mop 생성)
+                # 기존 부착된 오브젝트를 제거하고 새로운 Mop 부착
                 attached_object = game_world.replace_attached_object(Mop, attached_object, girl)
 
         else:
             if girl:
                 girl.handle_event(event)
+
 
 
 
