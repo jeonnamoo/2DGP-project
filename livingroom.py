@@ -14,6 +14,8 @@ from web import Web
 from can import Can
 from stain import Stain
 from broom import Broom
+from duster import Duster
+from mop import Mop
 
 image = None
 
@@ -49,9 +51,11 @@ stain_y_min, stain_y_max = 150, 810
 
 
 def init():
-    global image, doors, girl, last_used_door, web_list, can_list, stain_list, broom, broom_attached
+    global image, doors, girl, last_used_door, web_list, can_list, stain_list, broom
     image = load_image('livingroom.png')  # 배경 이미지 로드
-    doors = [Door(), Door(), Door(), Door()]  # 문 생성
+
+    if not doors:
+        doors.extend([Door(), Door(), Door(), Door()])  # 문 생성
 
     girl = game_world.get_object_by_class(Girl)
     if not girl:
@@ -79,7 +83,7 @@ def init():
         for _ in range(10):
             x = random.randint(web_x_min, web_x_max)
             y = random.randint(web_y_min, web_y_max)
-            web = Web()
+            web = Web(x, y)  # x, y 전달
             web_list.append((web, x, y))
 
     if not can_list:
@@ -93,8 +97,10 @@ def init():
         for _ in range(10):
             x = random.randint(stain_x_min, stain_x_max)
             y = random.randint(stain_y_min, stain_y_max)
-            stain = Stain()
+            stain = Stain(x, y)  # x와 y 전달
             stain_list.append((stain, x, y))
+
+
 
 
 def draw():
@@ -106,20 +112,30 @@ def draw():
         door.draw(*door_positions[f'door{i + 1}'])
 
     for web, x, y in web_list:
-        web.draw(x, y)
+        web.draw()
 
     for can, x, y in can_list:
-        can.draw()  # 인자 없이 호출
+        can.draw()
 
     for stain, x, y in stain_list:
-        stain.draw(x, y)
+        stain.draw()
+
+    # girl 및 부착된 물체 렌더링
+    if girl:
+        girl.draw()
+        if girl.item:  # 부착된 아이템이 있을 경우 렌더링
+            girl.item.draw()
 
     game_world.render()
     update_canvas()
 
 
+
+
+
+
 def handle_events():
-    global girl, can_list, broom
+    global girl, can_list, stain_list, web_list
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -127,12 +143,26 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
-            # Can과의 거리 계산 및 상호작용
+            # Can과의 상호작용
             for can, x, y in can_list:
                 distance_to_can = ((girl.x - can.x) ** 2 + (girl.y - can.y) ** 2) ** 0.5
-                if broom.attached and not can.removed and distance_to_can <= 30:
-                    can.activate_trash()  # Trash 애니메이션 시작
-                    return  # 다른 동작보다 우선 처리
+                if isinstance(girl.item, Broom) and not can.removed and distance_to_can <= 30:
+                    can.activate_trash()
+                    return
+
+            # Stain과의 상호작용
+            for stain, x, y in stain_list:
+                distance_to_stain = ((girl.x - stain.x) ** 2 + (girl.y - stain.y) ** 2) ** 0.5
+                if isinstance(girl.item, Mop) and not stain.removed and distance_to_stain <= 30:
+                    stain.activate_water()
+                    return
+
+            # Web과의 상호작용
+            for web, x, y in web_list:
+                distance_to_web = ((girl.x - web.x) ** 2 + (girl.y - web.y) ** 2) ** 0.5
+                if isinstance(girl.item, Duster) and not web.removed and distance_to_web <= 30:
+                    web.activate_dust()
+                    return
 
             # Door와의 거리 계산
             for door_name, position in door_positions.items():
@@ -152,6 +182,8 @@ def handle_events():
                 girl.handle_event(event)
 
 
+
+
 def update():
     global girl, broom
     if girl:  # girl 객체가 존재할 경우
@@ -160,6 +192,11 @@ def update():
 
     for can, x, y in can_list:
         can.update()  # Can 애니메이션 업데이트
+
+    for stain, x, y in stain_list:
+        stain.update()  # Stain 애니메이션 업데이트
+    for web, x, y in web_list:
+        web.update()
 
     game_world.update()  # 다른 객체 업데이트
 
