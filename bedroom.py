@@ -32,6 +32,7 @@ door_x, door_y = 244, 248  # 문 위치
 key_x, key_y = 1070, 570
 width, height = 1440, 960  # Yard 크기
 girl = None
+attached_key = None
 
 #web 배치 범위 설정
 web_x_min, web_x_max = 150, 1290
@@ -89,13 +90,15 @@ def init():
 
 
 def draw():
-    global image, door, broom,  duster, key
+    global image, door, broom,  duster, key, attached_key
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 문 그리기
 
     # 각 객체의 current_map을 기준으로 그리기
-    key.draw()
+    key.draw()  # 기존 key 그리기
+    if attached_key:  # 새로운 key가 생성되었다면 그리기
+        attached_key.draw()
 
     for web, x, y in web_list:
         web.draw(x,y)
@@ -112,7 +115,7 @@ def draw():
 
 
 def handle_events():
-    global girl, door, broom, mop, duster, key
+    global girl, door, broom, mop, duster, key, attached_key
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -124,13 +127,12 @@ def handle_events():
             distance1 = ((girl.x - door_x) ** 2 + (girl.y - door_y) ** 2) ** 0.5
             if distance1 <= 30:  # 문 근처(거리 30 이하)
                 game_framework.change_mode(livingroom)
+                # Key 근처에서 Space 키를 누르면 새로운 key 생성 및 부착
             distance_to_key = ((girl.x - key.x) ** 2 + (girl.y - key.y) ** 2) ** 0.5
-            if distance_to_key <= 30 and not key.attached:
-                key.attach(girl)  # broom을 girl에 부착
-
-                if key and key.attached:
-                    key.detach()
-                    key.x, key.y = 1070, 570  # yard 초기 위치로 복귀
+            if distance_to_key <= 30 and not attached_key:
+                attached_key = Key()  # 새로운 key 생성
+                attached_key.attach(girl)  # Girl에 부착
+                game_world.add_object(attached_key, 1)  # game_world에 추가
 
         else:
             if girl:
