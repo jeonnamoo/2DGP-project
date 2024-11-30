@@ -22,7 +22,7 @@ broom = None
 mop = None
 key = None
 duster = None
-attached_broom = None  # 새롭게 생성된 broom을 관리할 변수
+attached_object = None  # 새롭게 생성된 broom을 관리할 변수
 
 
 
@@ -58,14 +58,14 @@ def draw():
     door.draw(door_x, door_y)  # 문 그리기
 
     broom.draw()
-    if attached_broom:  # 새로운 broom이 생성되었다면 그리기
-        attached_broom.draw()
+    if attached_object:  # 새로운 broom이 생성되었다면 그리기
+        attached_object.draw()
 
     game_world.render()  # 나머지 객체들 그리기
     update_canvas()
 
 def handle_events():
-    global girl, door, broom, mop, key, duster, attached_broom
+    global girl, door, broom, mop, key, duster, attached_object
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -73,18 +73,16 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
-            # Girl과 Door 사이의 거리 계산
-            distance = ((girl.x - door_x) ** 2 + (girl.y - door_y) ** 2) ** 0.5
-            if distance <= 30:  # 문 근처(거리 30 이하)일 때만 Livingroom으로 전환
+            # Door 근처 거리 계산
+            distance_to_door = ((girl.x - door_x) ** 2 + (girl.y - door_y) ** 2) ** 0.5
+            if distance_to_door <= 30:
                 game_framework.change_mode(livingroom)
 
-            # Girl과 기존 Broom 간 거리 계산
+            # Broom 근처 거리 계산
             distance_to_broom = ((girl.x - broom.x) ** 2 + (girl.y - broom.y) ** 2) ** 0.5
-            if distance_to_broom <= 30 and not attached_broom:
-                # 새로운 Broom 생성 및 Girl에 부착
-                attached_broom = Broom()
-                attached_broom.attach(girl)
-                game_world.add_object(attached_broom, 1)
+            if distance_to_broom <= 30:
+                # broom 부착 (새로운 broom 생성)
+                attached_object = game_world.replace_attached_object(Broom, attached_object, girl)
 
         else:
             if girl:

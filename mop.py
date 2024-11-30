@@ -16,12 +16,10 @@ class Mop:
         self.current_map = "basement"  # 기본 맵을 yard로 설정
 
     def attach(self, girl):
-        """mop을 girl에 부착"""
         self.attached = True
         self.girl = girl
 
     def detach(self):
-        """mop을 girl에서 분리"""
         self.attached = False
         self.girl = None
 

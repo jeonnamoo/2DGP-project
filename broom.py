@@ -16,12 +16,10 @@ class Broom:
         self.current_map = "yard"  # 기본 맵을 yard로 설정
 
     def attach(self, girl):
-        """Girl에 부착"""
         self.attached = True
         self.girl = girl
 
     def detach(self):
-        """Girl과 분리"""
         self.attached = False
         self.girl = None
 

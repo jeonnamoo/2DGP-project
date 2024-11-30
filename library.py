@@ -25,6 +25,8 @@ broom = None
 mop = None
 key = None
 duster = None
+attached_duster = None
+
 door_x, door_y =700 , 190  # 문 위치
 duster_x, duster_y = 720, 630
 width, height = 1440, 960  # Yard 크기
@@ -87,12 +89,14 @@ def init():
 
 
 def draw():
-    global image, door, broom,  duster, key
+    global image, door, broom,  duster, key, attached_duster
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 문 그리기
 
     duster.draw()
+    if attached_duster:
+        attached_duster.draw()
 
     for web, x, y in web_list:
         web.draw(x,y)
@@ -109,7 +113,7 @@ def draw():
 
 
 def handle_events():
-    global girl, door, broom, mop, key, duster
+    global girl, door, broom, mop, key, duster, attached_duster
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -117,19 +121,17 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
-            # 첫 번째 문 근처에서 눌렀을 경우
-            distance1 = ((girl.x - door_x) ** 2 + (girl.y - door_y) ** 2) ** 0.5
-            if distance1 <= 30:  # 문 근처(거리 30 이하)
+            # 문 근처에서 Space 키를 누르면 livingroom으로 전환
+            distance_to_door = ((girl.x - door_x) ** 2 + (girl.y - door_y) ** 2) ** 0.5
+            if distance_to_door <= 30:
                 game_framework.change_mode(livingroom)
+
+            # Duster 근처에서 Space 키를 누르면 새로운 duster 생성 및 부착
             distance_to_duster = ((girl.x - duster.x) ** 2 + (girl.y - duster.y) ** 2) ** 0.5
-            if distance_to_duster <= 30 and not duster.attached:
-                duster.attach(girl)  # broom을 girl에 부착
-
-                if duster and duster.attached:
-                    duster.detach()
-                    duster.x, duster.y = 720, 630  # yard 초기 위치로 복귀
-
-
+            if distance_to_duster <= 30 and not attached_duster:
+                attached_duster = Duster()  # 새로운 duster 생성
+                attached_duster.attach(girl)  # Girl에 부착
+                game_world.add_object(attached_duster, 1)  # game_world에 추가
 
         else:
             if girl:

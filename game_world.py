@@ -41,3 +41,17 @@ def get_object_by_class(cls):
             if isinstance(o, cls):
                 return o
     return None
+
+def replace_attached_object(new_object_class, attached_object, girl):
+    """
+    기존 부착된 오브젝트를 제거하고 새 오브젝트를 부착합니다.
+    """
+    if attached_object:  # 기존 부착된 오브젝트가 있으면 제거
+        remove_object(attached_object)
+        attached_object.detach()
+
+    # 새로운 오브젝트 생성 및 부착
+    new_object = new_object_class()
+    new_object.attach(girl)
+    add_object(new_object, 1)
+    return new_object  # 새로 부착된 오브젝트 반환

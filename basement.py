@@ -25,7 +25,7 @@ broom = None
 mop = None
 key = None
 duster = None
-attached_mop = None
+attached_object = None
 
 door_x, door_y = 420, 770  # 문 위치
 width, height = 1440, 960  # Yard 크기
@@ -92,15 +92,15 @@ def init():
 
 
 def draw():
-    global image, door,  mop, attached_mop
+    global image, door,  mop, attached_object
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 문 그리기
 
     # 각 객체의 current_map을 기준으로 그리기
     mop.draw()  # 기존 mop 그리기
-    if attached_mop:  # 새로운 mop이 생성되었다면 그리기
-        attached_mop.draw()
+    if attached_object:  # 새로운 mop이 생성되었다면 그리기
+        attached_object.draw()
 
     for web, x, y in web_list:
         web.draw(x,y)
@@ -117,7 +117,7 @@ def draw():
 
 
 def handle_events():
-    global girl, door, mop, broom, key, duster, attached_mop
+    global girl, door, mop, broom, key, duster, attached_object
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -125,21 +125,21 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
-            # 첫 번째 문 근처에서 눌렀을 경우
-            distance1 = ((girl.x - door_x) ** 2 + (girl.y - door_y) ** 2) ** 0.5
-            if distance1 <= 30:  # 문 근처(거리 30 이하)
+            # Door 근처 거리 계산
+            distance_to_door = ((girl.x - door_x) ** 2 + (girl.y - door_y) ** 2) ** 0.5
+            if distance_to_door <= 30:
                 game_framework.change_mode(kitchen)
 
-            # mop 근처에서 Space 키를 누르면 새로운 mop 생성 및 부착
+            # Mop 근처 거리 계산
             distance_to_mop = ((girl.x - mop.x) ** 2 + (girl.y - mop.y) ** 2) ** 0.5
-            if distance_to_mop <= 30 and not attached_mop:
-                attached_mop = Mop()  # 새로운 mop 생성
-                attached_mop.attach(girl)  # Girl에 부착
-                game_world.add_object(attached_mop, 1)  # game_world에 추가
+            if distance_to_mop <= 30:
+                # mop 부착 (새로운 mop 생성)
+                attached_object = game_world.replace_attached_object(Mop, attached_object, girl)
 
         else:
             if girl:
                 girl.handle_event(event)
+
 
 
 def update():
