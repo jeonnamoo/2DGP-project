@@ -74,24 +74,27 @@ def init():
     if broom.attached:
         broom.x, broom.y = girl.x, girl.y  # broom 위치 동기화
 
-    # Web, Can, Stain 오브젝트 생성
-    for _ in range(10):
-        x = random.randint(web_x_min, web_x_max)
-        y = random.randint(web_y_min, web_y_max)
-        web = Web()
-        web_list.append((web, x, y))
+    # 이미 생성된 web_list, can_list, stain_list를 재사용
+    if not web_list:
+        for _ in range(10):
+            x = random.randint(web_x_min, web_x_max)
+            y = random.randint(web_y_min, web_y_max)
+            web = Web()
+            web_list.append((web, x, y))
 
-    for _ in range(10):
-        x = random.randint(can_x_min, can_x_max)
-        y = random.randint(can_y_min, can_y_max)
-        can = Can(x, y)  # x와 y 전달
-        can_list.append((can, x, y))
+    if not can_list:
+        for _ in range(10):
+            x = random.randint(can_x_min, can_x_max)
+            y = random.randint(can_y_min, can_y_max)
+            can = Can(x, y)
+            can_list.append((can, x, y))
 
-    for _ in range(10):
-        x = random.randint(stain_x_min, stain_x_max)
-        y = random.randint(stain_y_min, stain_y_max)
-        stain = Stain()
-        stain_list.append((stain, x, y))
+    if not stain_list:
+        for _ in range(10):
+            x = random.randint(stain_x_min, stain_x_max)
+            y = random.randint(stain_y_min, stain_y_max)
+            stain = Stain()
+            stain_list.append((stain, x, y))
 
 
 def draw():
@@ -155,16 +158,13 @@ def update():
         girl.x = max(200, min(1290, girl.x))  # x축 이동 범위 제한
         girl.y = max(150, min(810, girl.y))  # y축 이동 범위 제한
 
-    if broom and broom.attached:  # broom이 부착된 상태일 경우 위치 동기화
-        broom.x, broom.y = girl.x, girl.y
+    for can, x, y in can_list:
+        can.update()  # Can 애니메이션 업데이트
 
     game_world.update()  # 다른 객체 업데이트
 
 
 def finish():
-    global image, doors, web_list, can_list, stain_list
+    global image, doors
     del image
     doors.clear()
-    web_list.clear()
-    can_list.clear()
-    stain_list.clear()
