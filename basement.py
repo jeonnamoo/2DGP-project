@@ -92,16 +92,15 @@ def init():
 
 
 def draw():
-    global image, door,  mop
+    global image, door,  mop, attached_mop
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 문 그리기
 
     # 각 객체의 current_map을 기준으로 그리기
-    mop.draw()
-
-    if attached_mop:
-        attached_mop.darw()
+    mop.draw()  # 기존 mop 그리기
+    if attached_mop:  # 새로운 mop이 생성되었다면 그리기
+        attached_mop.draw()
 
     for web, x, y in web_list:
         web.draw(x,y)
@@ -131,13 +130,12 @@ def handle_events():
             if distance1 <= 30:  # 문 근처(거리 30 이하)
                 game_framework.change_mode(kitchen)
 
-            # Mop이 Girl과 충돌했을 경우
+            # mop 근처에서 Space 키를 누르면 새로운 mop 생성 및 부착
             distance_to_mop = ((girl.x - mop.x) ** 2 + (girl.y - mop.y) ** 2) ** 0.5
-            if distance_to_mop <= 50 and not mop.attached:
-                mop.attach(girl)  # 부착
-            elif mop.attached:
-                mop.detach()  # 분리
-                mop.x, mop.y = 1100, 300  # 초기 위치로 복귀
+            if distance_to_mop <= 30 and not attached_mop:
+                attached_mop = Mop()  # 새로운 mop 생성
+                attached_mop.attach(girl)  # Girl에 부착
+                game_world.add_object(attached_mop, 1)  # game_world에 추가
 
         else:
             if girl:
@@ -145,7 +143,7 @@ def handle_events():
 
 
 def update():
-    global girl, mop
+    global girl
     if girl:  # girl 객체가 존재할 경우에만 실행
         girl.x = max(270, min(1180, girl.x))  # x축 이동 범위 제한
         girl.y = max(210, min(760, girl.y))  # y축 이동 범위 제한

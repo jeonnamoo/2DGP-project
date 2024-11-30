@@ -27,7 +27,7 @@ class Mop:
 
     def update(self):
         """부착된 상태일 경우 girl의 위치를 따라감"""
-        if self.current_map == "basement" and self.attached and self.girl:
+        if self.attached and self.girl:
             self.x, self.y = self.girl.x, self.girl.y
 
     def draw(self):
