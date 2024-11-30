@@ -18,11 +18,11 @@ from gage import Gage
 
 
 image = None
-gage = None
+
 web_list = []
 can_list = []
 stain_list = []
-
+gage = None
 door = None
 broom = None
 mop = None
@@ -104,8 +104,7 @@ def draw():
 
     # 각 객체의 current_map을 기준으로 그리기
     # girl 및 부착된 물체 렌더링
-    if gage:
-        gage.draw()  # gage 그리기
+
 
     if girl:
         girl.draw()
@@ -120,7 +119,8 @@ def draw():
 
     for stain, x, y in stain_list:
         stain.draw()
-
+    if gage:
+        gage.draw()  # gage 그리기
 
     game_world.render()
     update_canvas()
