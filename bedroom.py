@@ -14,11 +14,11 @@ from mop import Mop
 from web import Web
 from can import Can
 from stain import Stain
-
+from gage import Gage
 
 
 image = None
-
+gage = None
 web_list = []
 can_list = []
 stain_list = []
@@ -46,7 +46,7 @@ stain_y_min, stain_y_max = 250, 610
 
 
 def init():
-    global image, door, girl, key,duster, broom,  web_list, can_list, stain_list
+    global image, door, girl, key,duster, broom,  web_list, can_list, stain_list, gage
     image = load_image('bedroom.png')  # 배경 이미지 로드
     door = Door(width=32, height=32)  # 첫 번째 문 크기 설정
     key = Key(width=32, height =32)
@@ -66,6 +66,10 @@ def init():
         game_world.add_object(key, 1)
     key.current_map = "bedroom"  # 현재 맵 설정
     key.x, key.y = 1070, 570  # Key 초기 위치
+
+    if not gage:
+        gage = Gage()
+        game_world.add_object(gage, 3)  # UI 레이어에 추가
 
     if not key.attached:
         key.x, key.y = 1070, 570  # broom 초기 위치
@@ -93,13 +97,16 @@ def init():
 
 
 def draw():
-    global image, door, broom,  duster, key
+    global image, door, broom,  duster, key, gage
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 문 그리기
 
     # 각 객체의 current_map을 기준으로 그리기
     # girl 및 부착된 물체 렌더링
+    if gage:
+        gage.draw()  # gage 그리기
+
     if girl:
         girl.draw()
         if girl.item:  # 부착된 아이템이 있을 경우 렌더링
@@ -164,7 +171,7 @@ def handle_events():
 
 
 def update():
-    global girl
+    global girl, gage
     if girl:  # girl 객체가 존재할 경우에만 실행
         girl.x = max(150, min(1290, girl.x))  # x축 이동 범위 제한
         girl.y = max(250, min(610, girl.y))  # y축 이동 범위 제한
@@ -175,15 +182,13 @@ def update():
         stain.update()  # Stain 애니메이션 업데이트
     for web, x, y in web_list:
         web.update()
-    global gage
+
 
     if gage:
         game_framework.update_gage(gage)  # gage 상태 업데이트
         gage.update()
 
-    # 다른 객체 업데이트
-    for obj in game_world.objects:
-        obj.update()
+
     game_world.update()  # 다른 객체들도 업데이트
 
 

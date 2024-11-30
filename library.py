@@ -14,12 +14,13 @@ from stain import Stain
 from mop import Mop
 from broom import Broom
 from key import Key
+from gage import Gage
 
 image = None
 web_list = []
 can_list = []
 stain_list = []
-
+gage = None
 door = None
 broom = None
 mop = None
@@ -44,7 +45,7 @@ stain_y_min, stain_y_max = 150, 610
 
 
 def init():
-    global image, door, girl, duster,mop, key, broom, web_list, can_list, stain_list
+    global image, door, girl, duster,mop, key, broom, web_list, can_list, stain_list, gage
     image = load_image('library.png')  # 배경 이미지 로드
     door = Door(width=32, height=32)  # 첫 번째 문 크기 설정
     duster = Duster(width=32, height=32)
@@ -54,7 +55,9 @@ def init():
     if not girl:  # girl 객체가 없으면 새로 생성
         girl = Girl()
         game_world.add_object(girl, 2)
-
+    if not gage:
+        gage = Gage()
+        game_world.add_object(gage, 3)  # UI 레이어에 추가
 
     # Duster 초기화
     duster = game_world.get_object_by_class(Duster)
@@ -92,7 +95,7 @@ def init():
 
 
 def draw():
-    global image, door, broom,  duster, key, attached_duster
+    global image, door, broom,  duster, key, attached_duster, gage
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 문 그리기
@@ -100,6 +103,9 @@ def draw():
     duster.draw()
     if attached_duster:
         attached_duster.draw()
+
+    if gage:
+        gage.draw()  # gage 그리기
 
     for web, x, y in web_list:
         web.draw()
@@ -166,7 +172,7 @@ def handle_events():
 
 
 def update():
-    global girl
+    global girl, gage
     if girl:  # girl 객체가 존재할 경우에만 실행
         girl.x = max(400, min(1040, girl.x))  # x축 이동 범위 제한
         girl.y = max(150, min(610, girl.y))  # y축 이동 범위 제한
@@ -177,15 +183,13 @@ def update():
         stain.update()  # Stain 애니메이션 업데이트
     for web, x, y in web_list:
         web.update()
-    global gage
+
 
     if gage:
         game_framework.update_gage(gage)  # gage 상태 업데이트
         gage.update()
 
-    # 다른 객체 업데이트
-    for obj in game_world.objects:
-        obj.update()
+
 
 
     game_world.update()  # 다른 객체들도 업데이트
