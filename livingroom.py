@@ -120,6 +120,9 @@ def draw():
     for i, door in enumerate(doors):
         door.draw(*door_positions[f'door{i + 1}'])
 
+    if gage:
+        gage.draw()  # gage 그리기
+
     for web, x, y in web_list:
         web.draw()
 
@@ -129,8 +132,7 @@ def draw():
     for stain, x, y in stain_list:
         stain.draw()
 
-    if gage:
-        gage.draw()  # gage 그리기
+
 
     # girl 및 부착된 물체 렌더링
     if girl:

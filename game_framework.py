@@ -1,5 +1,6 @@
 import basement
 import bedroom
+import gage
 import kitchen
 import library
 import livingroom
@@ -63,6 +64,11 @@ def run(start_mode):
     while stack:
         stack[-1].finish()
         stack.pop()
+    # gage 상태 지속적으로 업데이트
+    if gage:
+        total_objects, removed_objects = count_removed_objects()
+        removed_percentage = removed_objects * 0.66
+        gage.update_level(min(removed_percentage, 100))
 
 def count_removed_objects():
     """제거된 객체 수 계산"""
