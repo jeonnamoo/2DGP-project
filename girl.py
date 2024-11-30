@@ -2,7 +2,7 @@ from pico2d import get_time, load_image, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDL
 from state_machine import *
 from broom import Broom
 import game_world
-import yard
+
 
 
 class Idle:

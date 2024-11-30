@@ -177,6 +177,15 @@ def update():
         stain.update()  # Stain 애니메이션 업데이트
     for web, x, y in web_list:
         web.update()
+    global gage
+
+    if gage:
+        game_framework.update_gage(gage)  # gage 상태 업데이트
+        gage.update()
+
+    # 다른 객체 업데이트
+    for obj in game_world.objects:
+        obj.update()
 
 
     game_world.update()  # 다른 객체들도 업데이트

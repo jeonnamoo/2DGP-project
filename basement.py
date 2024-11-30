@@ -14,11 +14,13 @@ from stain import Stain
 from broom import Broom
 from key import Key
 from duster import Duster
+from gage import Gage
 
 image = None
 web_list = []
 can_list = []
 stain_list = []
+gage = None
 
 door = None
 broom = None
@@ -45,7 +47,7 @@ stain_y_min, stain_y_max = 210, 760
 
 
 def init():
-    global image, door, girl, mop,  web_list, can_list, stain_list
+    global image, door, girl, mop,  web_list, can_list, stain_list, gage
     image = load_image('basement.png')  # 배경 이미지 로드
     door = Door(width=32, height=32)  # 첫 번째 문 크기 설정
 
@@ -63,6 +65,10 @@ def init():
         girl = Girl()
         game_world.add_object(girl, 2)
     girl.x, girl.y = 420, 770  # 초기 위치
+
+    if not gage:
+        gage = Gage()
+        game_world.add_object(gage, 3)  # UI 레이어에 추가
 
     if not web_list:
         for _ in range(10):
@@ -91,7 +97,7 @@ def init():
 
 
 def draw():
-    global image, door,  mop, attached_object
+    global image, door,  mop, attached_object, gage
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 문 그리기
@@ -110,6 +116,8 @@ def draw():
     for stain, x, y in stain_list:
         stain.draw()
 
+    if gage:
+        gage.draw()  # gage 그리기
 
     game_world.render()
     update_canvas()
@@ -162,7 +170,7 @@ def handle_events():
 
 
 def update():
-    global girl
+    global girl, gage
     if girl:  # girl 객체가 존재할 경우에만 실행
         girl.x = max(270, min(1180, girl.x))  # x축 이동 범위 제한
         girl.y = max(210, min(760, girl.y))  # y축 이동 범위 제한
@@ -174,6 +182,11 @@ def update():
         stain.update()  # Stain 애니메이션 업데이트
     for web, x, y in web_list:
         web.update()
+
+    if gage:
+        game_framework.update_gage(gage)  # gage 상태 업데이트
+        gage.update()
+
 
 
     game_world.update()  # 다른 객체들도 업데이트

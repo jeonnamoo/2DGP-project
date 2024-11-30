@@ -9,10 +9,12 @@ import livingroom
 from mop import Mop
 from duster import Duster
 from key import Key
+from gage import Gage
 
 
 image = None
 door = None
+gage = None
 
 door_x, door_y = 720, 550  # 문 위치
 width, height = 1440, 960  # Yard 크기
@@ -24,10 +26,14 @@ key = None
 duster = None
 attached_object = None  # 새롭게 생성된 broom을 관리할 변수
 
+# yard.py
+web_list = []
+stain_list = []
+can_list = []
 
 
 def init():
-    global image, door, girl, broom, mop, duster, key
+    global image, door, girl, broom, mop, duster, key, gage
     image = load_image('yard.png')  # 배경 이미지 로드
     door = Door(width=32, height=32)  # 문 크기 설정
 
@@ -41,6 +47,10 @@ def init():
     if not broom:
         broom = Broom(width=32, height=32)
         game_world.add_object(broom, 1)
+    # gage 초기화 및 추가
+    if not gage:
+        gage = Gage()
+        game_world.add_object(gage, 3)  # UI 레이어에 추가
 
 
     broom.current_map = "yard"  # 현재 맵을 yard로 설정
@@ -52,14 +62,15 @@ def init():
 
 
 def draw():
-    global image, door, broom, mop, duster, key
+    global image, door, broom,  gage
     clear_canvas()
     image.draw_to_origin(0, 0, width, height)  # 배경 그리기
     door.draw(door_x, door_y)  # 문 그리기
 
     broom.draw()
-    if attached_object:  # 새로운 broom이 생성되었다면 그리기
-        attached_object.draw()
+
+    if gage:
+        gage.draw()  # gage 그리기
 
     game_world.render()  # 나머지 객체들 그리기
     update_canvas()
@@ -90,10 +101,16 @@ def handle_events():
 
 
 def update():
-    global girl
+    global girl, gage
     if girl:  # girl 객체가 존재할 경우에만 실행
         girl.x = max(500, min(820, girl.x))  # x축 이동 범위 제한
         girl.y = max(475, min(530, girl.y))  # y축 이동 범위 제한
+
+    if gage:
+        game_framework.update_gage(gage)  # gage 상태 업데이트
+        gage.update()
+
+
 
     game_world.update()  # 다른 객체들도 업데이트
 
