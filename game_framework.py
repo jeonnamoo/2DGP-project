@@ -1,4 +1,5 @@
 import basement
+import bedroom
 import kitchen
 import library
 import livingroom
@@ -64,17 +65,16 @@ def run(start_mode):
         stack.pop()
 
 def count_removed_objects():
-    """모든 맵의 객체를 추적하여 제거 상태 계산"""
-    total_objects = 0
+    """제거된 객체 수 계산"""
+    total_objects = 150  # 총 객체 수 고정
     removed_objects = 0
 
-    for map_name in [yard, basement, kitchen, livingroom, library]:
+    for map_name in [yard, basement, bedroom, kitchen, livingroom, library]:
         # 각 맵의 객체 리스트를 안전하게 접근
         for obj_list_name in ['web_list', 'stain_list', 'can_list']:
             obj_list = getattr(map_name, obj_list_name, [])
             for obj, _, _ in obj_list:
-                total_objects += 1
-                if obj.removed:
+                if obj.removed:  # 제거된 객체만 카운트
                     removed_objects += 1
 
     return total_objects, removed_objects
@@ -84,8 +84,12 @@ def count_removed_objects():
 def update_gage(gage):
     """gage 업데이트 로직"""
     total_objects, removed_objects = count_removed_objects()
-    if total_objects == 0:
-        return  # 객체가 없으면 아무 것도 하지 않음
 
-    removed_percentage = (removed_objects / total_objects) * 100
+    # 제거된 객체에 따라 퍼센티지 계산 (1개당 1.5%)
+    removed_percentage = removed_objects * 0.66
+
+    # 퍼센티지가 100%를 넘지 않도록 제한
+    if removed_percentage > 100:
+        removed_percentage = 100
+
     gage.update_level(removed_percentage)

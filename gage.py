@@ -13,7 +13,7 @@ class Gage:
 
     def update_level(self, removed_percentage):
         """제거된 퍼센티지에 따라 게이지를 업데이트"""
-        self.percentage = min(max(removed_percentage, 0), 200)  # 0~100 사이로 제한
+        self.percentage = min(max(removed_percentage, 0), 100)  # 0~100 사이로 제한
 
     def draw(self):
         """게이지와 바를 렌더링"""
@@ -22,10 +22,10 @@ class Gage:
 
         # 퍼센티지에 따라 gage_bar 채우기
         if self.percentage > 0:
-            fill_width = int(self.gage_width * (self.percentage / 200))  # 채워질 너비 계산
+            fill_width = int(self.gage_width * (self.percentage / 100))  # 채워질 너비 계산
             self.bar_image.clip_draw_to_origin(
                 0, 0, fill_width, self.bar_height,  # 클립 영역
-                self.x - (self.gage_width // 2)+10,  # 왼쪽 끝부터 시작
+                self.x - (self.gage_width // 2) + 10,  # 왼쪽 끝부터 시작 (10px 오른쪽으로 이동)
                 self.y - (self.bar_height // 2)  # y 좌표 중앙 맞춤
             )
 
