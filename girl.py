@@ -89,7 +89,7 @@ class Girl:
                 Run: {bottom_up: Idle, right_up: Idle, top_up: Idle, left_up: Idle},
             }
         )
-        self.set_item('NONE')
+        self.item = None  # 현재 부착된 아이템
 
     def update(self):
         self.state_machine.update()
@@ -102,4 +102,15 @@ class Girl:
         self.state_machine.draw()
 
     def set_item(self, item):
-        self.item = item
+        """
+        현재 부착된 아이템을 관리. 기존 아이템이 있으면 제거하고 새 아이템을 부착.
+        """
+        if self.item:  # 기존 부착된 아이템이 있으면 제거
+            print(f"Removing attached item: {self.item}")
+            self.item.detach()  # 기존 아이템의 부착 해제
+            game_world.remove_object(self.item)  # game_world에서 제거
+        if item:  # 새로운 아이템을 부착
+            print(f"Attaching new item: {item}")
+            item.attach(self)
+            game_world.add_object(item, 1)
+        self.item = item  # 부착된 아이템 업데이트

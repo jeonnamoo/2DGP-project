@@ -128,11 +128,10 @@ def handle_events():
             if distance1 <= 30:  # 문 근처(거리 30 이하)
                 game_framework.change_mode(livingroom)
                 # Key 근처에서 Space 키를 누르면 새로운 key 생성 및 부착
+
             distance_to_key = ((girl.x - key.x) ** 2 + (girl.y - key.y) ** 2) ** 0.5
-            if distance_to_key <= 30 and not attached_key:
-                attached_key = Key()  # 새로운 key 생성
-                attached_key.attach(girl)  # Girl에 부착
-                game_world.add_object(attached_key, 1)  # game_world에 추가
+            if distance_to_key <= 30:
+                girl.set_item(key)  # 새로운 Key 부착
 
         else:
             if girl:

@@ -126,12 +126,10 @@ def handle_events():
             if distance_to_door <= 30:
                 game_framework.change_mode(livingroom)
 
-            # Duster 근처에서 Space 키를 누르면 새로운 duster 생성 및 부착
+            # Duster 근처 거리 계산
             distance_to_duster = ((girl.x - duster.x) ** 2 + (girl.y - duster.y) ** 2) ** 0.5
-            if distance_to_duster <= 30 and not attached_duster:
-                attached_duster = Duster()  # 새로운 duster 생성
-                attached_duster.attach(girl)  # Girl에 부착
-                game_world.add_object(attached_duster, 1)  # game_world에 추가
+            if distance_to_duster <= 30:
+                girl.set_item(duster)  # 새로운 Duster 부착
 
         else:
             if girl:

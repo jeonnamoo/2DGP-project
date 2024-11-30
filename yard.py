@@ -65,7 +65,7 @@ def draw():
     update_canvas()
 
 def handle_events():
-    global girl, door, broom, mop, key, duster, attached_object
+    global girl, door, broom, attached_object
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -81,12 +81,13 @@ def handle_events():
             # Broom 근처 거리 계산
             distance_to_broom = ((girl.x - broom.x) ** 2 + (girl.y - broom.y) ** 2) ** 0.5
             if distance_to_broom <= 30:
-                # broom 부착 (새로운 broom 생성)
-                attached_object = game_world.replace_attached_object(Broom, attached_object, girl)
+                girl.set_item(broom)  # 새로운 Broom 부착
 
         else:
             if girl:
                 girl.handle_event(event)
+
+
 
 def update():
     global girl

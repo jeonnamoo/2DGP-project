@@ -117,7 +117,7 @@ def draw():
 
 
 def handle_events():
-    global girl, door, mop, broom, key, duster, attached_object
+    global girl, door, mop, attached_object
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -130,16 +130,14 @@ def handle_events():
             if distance_to_door <= 30:
                 game_framework.change_mode(kitchen)
 
-            # Mop 근처 거리 계산
+            # Broom 근처 거리 계산
             distance_to_mop = ((girl.x - mop.x) ** 2 + (girl.y - mop.y) ** 2) ** 0.5
             if distance_to_mop <= 30:
-                # 기존 부착된 오브젝트를 제거하고 새로운 Mop 부착
-                attached_object = game_world.replace_attached_object(Mop, attached_object, girl)
+                girl.set_item(mop)  # 새로운 Broom 부착
 
         else:
             if girl:
                 girl.handle_event(event)
-
 
 
 
