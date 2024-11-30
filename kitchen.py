@@ -45,7 +45,7 @@ def init():
     if not girl:  # girl 객체가 없으면 새로 생성
         girl = Girl()
         game_world.add_object(girl, 2)
-    
+
 
 
     # 마지막 사용된 문에 따라 초기 위치 설정

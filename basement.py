@@ -25,6 +25,7 @@ broom = None
 mop = None
 key = None
 duster = None
+attached_mop = None
 
 door_x, door_y = 420, 770  # 문 위치
 width, height = 1440, 960  # Yard 크기
@@ -99,6 +100,9 @@ def draw():
     # 각 객체의 current_map을 기준으로 그리기
     mop.draw()
 
+    if attached_mop:
+        attached_mop.darw()
+
     for web, x, y in web_list:
         web.draw(x,y)
 
@@ -114,7 +118,7 @@ def draw():
 
 
 def handle_events():
-    global girl, door, mop, broom, key, duster
+    global girl, door, mop, broom, key, duster, attached_mop
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:

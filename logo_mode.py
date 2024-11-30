@@ -12,6 +12,8 @@ def init():
 
     logo_start_time = get_time()
 
+
+
 def finish():
     global image
     del image

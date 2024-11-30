@@ -16,17 +16,17 @@ class Broom:
         self.current_map = "yard"  # 기본 맵을 yard로 설정
 
     def attach(self, girl):
-        """broom을 girl에 부착"""
+        """Girl에 부착"""
         self.attached = True
         self.girl = girl
 
     def detach(self):
-        """broom을 girl에서 분리"""
+        """Girl과 분리"""
         self.attached = False
         self.girl = None
 
     def update(self):
-        """부착된 상태일 경우 girl의 위치를 따라감"""
+        """부착 상태에 따라 동작"""
         if self.attached and self.girl:
             self.x, self.y = self.girl.x, self.girl.y
 
