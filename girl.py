@@ -81,6 +81,7 @@ class Girl:
         self.action = 0  # 현재 상태 (0: 아래, 1: 오른쪽, 2: 위, 3: 왼쪽)
         self.frame = 0  # 애니메이션 프레임
         self.image = load_image('animation_sheet1.png')  # 스프라이트 시트 로드
+        self.circle_mask = load_image('circle_mask.png')  # 원형 마스크 로드
         self.state_machine = StateMachine(self)
         self.state_machine.start(Idle)
         self.state_machine.set_transitions(
@@ -100,6 +101,7 @@ class Girl:
 
     def draw(self):
         self.state_machine.draw()
+        self.circle_mask.draw(self.x, self.y)
 
     def set_item(self, item):
         """

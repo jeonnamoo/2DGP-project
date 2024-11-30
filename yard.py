@@ -12,6 +12,7 @@ from key import Key
 from gage import Gage
 
 
+
 image = None
 door = None
 gage = None
