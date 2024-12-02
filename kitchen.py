@@ -30,13 +30,13 @@ girl = None
 last_door_used = None  # 마지막 사용된 문
 
 web_x_min, web_x_max = 200, 1240
-web_y_min, web_y_max = 150, 730
+web_y_min, web_y_max = 240, 730
 
 can_x_min, can_x_max = 200, 1240
-can_y_min, can_y_max = 150, 730
+can_y_min, can_y_max = 240, 730
 
 stain_x_min, stain_x_max = 200, 1240
-stain_y_min, stain_y_max = 150, 730
+stain_y_min, stain_y_max = 240, 730
 
 def init():
     global image, door1, door2, girl, last_door_used, web_list, can_list, stain_list, gage
@@ -159,7 +159,7 @@ def update():
     global girl, gage
     if girl:  # girl 객체가 존재할 경우에만 실행
         girl.x = max(200, min(1240, girl.x))  # x축 이동 범위 제한
-        girl.y = max(150, min(730, girl.y))  # y축 이동 범위 제한
+        girl.y = max(240, min(730, girl.y))  # y축 이동 범위 제한
     for can, x, y in can_list:
         can.update()  # Can 애니메이션 업데이트
 
