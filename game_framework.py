@@ -85,17 +85,9 @@ def count_removed_objects():
 
     return total_objects, removed_objects
 
-
-
 def update_gage(gage):
     """gage 업데이트 로직"""
     total_objects, removed_objects = count_removed_objects()
 
-    # 제거된 객체에 따라 퍼센티지 계산 (1개당 1.5%)
-    removed_percentage = removed_objects * 0.66
-
-    # 퍼센티지가 100%를 넘지 않도록 제한
-    if removed_percentage > 100:
-        removed_percentage = 100
-
-    gage.update_level(removed_percentage)
+    # Gage에 업데이트
+    gage.update_level(removed_objects)  # removed_objects로 변경
