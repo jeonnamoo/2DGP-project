@@ -31,7 +31,7 @@ key_required = True
 
 # 문 위치
 door_positions = {
-    'door1': (820, 300),
+    'door1': (820, 160),
     'door2': (410, 160),
     'door3': (790, 800),
     'door4': (1290, 445),
@@ -78,7 +78,7 @@ def init():
     if last_used_door and last_used_door in door_positions:
         girl.x, girl.y = door_positions[last_used_door]
     else:  # 기본 위치
-        girl.x, girl.y = 820, 300
+        girl.x, girl.y = 820, 160
 
     if broom.attached:
         broom.x, broom.y = girl.x, girl.y  # broom 위치 동기화

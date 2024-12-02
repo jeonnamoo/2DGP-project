@@ -23,7 +23,7 @@ can_list = []
 stain_list = []
 door1 = None
 door2 = None
-door1_x, door1_y = 803, 275  # 첫 번째 문 위치
+door1_x, door1_y = 803, 255  # 첫 번째 문 위치
 door2_x, door2_y = 780, 750  # 두 번째 문 위치
 width, height = 1440, 960  # Kitchen 크기
 girl = None
@@ -57,7 +57,7 @@ def init():
     elif last_door_used == "door2":
         girl.x, girl.y = door2_x, door2_y
     else:  # 기본 초기 위치
-        girl.x, girl.y = 803, 275
+        girl.x, girl.y = 803, 255
 
     if not gage:
         gage = Gage()
