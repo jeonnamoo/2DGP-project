@@ -55,8 +55,7 @@ class Run:
 
     @staticmethod
     def exit(girl, e):
-        if space_down(e):
-            girl.fire_ball()
+        pass
 
     @staticmethod
     def do(girl):
