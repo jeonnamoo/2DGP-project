@@ -6,10 +6,11 @@ import library
 import livingroom
 import yard
 
+import time
+
 running = None
 stack = None
-
-
+frame_time = 0.0  # frame_time 초기화
 
 current_map = None  # 현재 맵을 추적할 전역 변수
 
@@ -51,15 +52,22 @@ def quit():
 
 
 def run(start_mode):
-    global running, stack
+    global running, stack, frame_time
     running = True
     stack = [start_mode]
     start_mode.init()
 
+
+    current_time = time.time()
     while running:
         stack[-1].handle_events()
         stack[-1].update()
         stack[-1].draw()
+
+        # frame_time 계산
+        new_time = time.time()
+        frame_time = new_time - current_time
+        current_time = new_time
 
     while stack:
         stack[-1].finish()
