@@ -78,6 +78,7 @@ def run(start_mode):
         removed_percentage = removed_objects * 0.66
         gage.update_level(min(removed_percentage, 100))
 
+
 def count_removed_objects():
     """제거된 객체 수 계산"""
     total_objects = 150  # 총 객체 수 고정
