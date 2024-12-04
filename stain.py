@@ -1,15 +1,19 @@
 from pico2d import *
 
+
 class Stain:
     image = None
     water_image = None
+    sound = None
 
     def __init__(self, x, y, width=40, height=50, scale=2):
         if Stain.image is None:
             Stain.image = load_image('stain.png')  # Stain 이미지 로드
         if Stain.water_image is None:
             Stain.water_image = load_image('water.png')  # Water 애니메이션 이미지 로드
-
+        if Stain.sound is None:
+            Stain.sound = load_wav('mop1.wav')  # Stain 사운드 로드
+            Stain.sound.set_volume(64)  # 볼륨 설정 (0~128)
         self.x, self.y = x, y
         self.width, self.height = width * scale, height * scale
         self.removed = False  # Stain이 삭제되었는지 여부
@@ -18,13 +22,16 @@ class Stain:
         self.water_timer = 0  # 애니메이션 타이머
         self.water_frame_count = 4  # 총 애니메이션 프레임 수
         self.water_frame_delay = 1.0  # 프레임 간 지연 시간 (초)
+        self.mop = None  # Mop 객체 참조 추가
+
 
     def activate_water(self):
-        """Water 애니메이션을 활성화"""
+        """Water 애니메이션을 활성화하고 사운드를 재생"""
         if not self.water_active and not self.removed:
             self.water_active = True
             self.water_frame = 0
             self.water_timer = 0
+            Stain.sound.play()  # 사운드 재생
 
     def update(self):
         """Water 애니메이션 업데이트"""
