@@ -156,6 +156,7 @@ def handle_events():
             # Door 근처 거리 계산
             distance_to_door = ((girl.x - door_x) ** 2 + (girl.y - door_y) ** 2) ** 0.5
             if distance_to_door <= 30:
+                door.play_sound()  # Door 사운드 재생
                 game_framework.change_mode(kitchen)
 
             # Broom 근처 거리 계산

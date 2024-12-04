@@ -3,6 +3,7 @@ import random
 from pico2d import *
 
 import basement
+import door
 import game_framework
 import game_world
 import livingroom
@@ -120,6 +121,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_SPACE:
+            # Can과의 상호작용
             for can, x, y in can_list:
                 distance_to_can = ((girl.x - can.x) ** 2 + (girl.y - can.y) ** 2) ** 0.5
                 if isinstance(girl.item, Broom) and not can.removed and distance_to_can <= 30:
@@ -144,16 +146,19 @@ def handle_events():
             distance1 = ((girl.x - door1_x) ** 2 + (girl.y - door1_y) ** 2) ** 0.5
             if distance1 <= 30:  # 문 근처(거리 30 이하)
                 last_door_used = "door1"
+                door1.play_sound()  # door1 사운드 재생
                 game_framework.change_mode(livingroom)
 
             # 두 번째 문 근처에서 눌렀을 경우
             distance2 = ((girl.x - door2_x) ** 2 + (girl.y - door2_y) ** 2) ** 0.5
             if distance2 <= 30:  # 문 근처(거리 30 이하)
                 last_door_used = "door2"
+                door2.play_sound()  # door2 사운드 재생
                 game_framework.change_mode(basement)
         else:
             if girl:
                 girl.handle_event(event)
+
 
 def update():
     global girl, gage

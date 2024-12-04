@@ -3,6 +3,7 @@ import random
 from pico2d import *
 
 import bedroom
+import door
 import game_framework
 import game_world
 import kitchen
@@ -179,17 +180,18 @@ def handle_events():
                     return
 
             # Door와의 거리 계산
-            for door_name, position in door_positions.items():
+            for idx, (door, position) in enumerate(zip(doors, door_positions.values())):
                 distance = ((girl.x - position[0]) ** 2 + (girl.y - position[1]) ** 2) ** 0.5
                 if distance <= 30:
-                    last_used_door = door_name
-                    if door_name == 'door1':
+                    last_used_door = list(door_positions.keys())[idx]
+                    door.play_sound()  # 해당 Door 객체의 사운드 재생
+                    if last_used_door == 'door1':
                         game_framework.change_mode(yard)
-                    elif door_name == 'door2':
+                    elif last_used_door == 'door2':
                         game_framework.change_mode(kitchen)
-                    elif door_name == 'door3':
+                    elif last_used_door == 'door3':
                         game_framework.change_mode(bedroom)
-                    elif door_name == 'door4':
+                    elif last_used_door == 'door4':
                         if key_required:
                             # Key가 부착되어 있어야만 이동 가능
                             if isinstance(girl.item, Key):
@@ -202,6 +204,7 @@ def handle_events():
         else:
             if girl:
                 girl.handle_event(event)
+
 
 
 

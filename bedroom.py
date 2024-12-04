@@ -158,6 +158,7 @@ def handle_events():
             # 첫 번째 문 근처에서 눌렀을 경우
             distance1 = ((girl.x - door_x) ** 2 + (girl.y - door_y) ** 2) ** 0.5
             if distance1 <= 30:  # 문 근처(거리 30 이하)
+                door.play_sound()  # Door 사운드 재생
                 game_framework.change_mode(livingroom)
                 # Key 근처에서 Space 키를 누르면 새로운 key 생성 및 부착
 
