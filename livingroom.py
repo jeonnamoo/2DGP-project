@@ -145,10 +145,6 @@ def draw():
     update_canvas()
 
 
-
-
-
-
 def handle_events():
     global girl, can_list, stain_list, web_list, broom, duster, mop, last_used_door, key_required
     events = get_events()
@@ -184,29 +180,29 @@ def handle_events():
                 distance = ((girl.x - position[0]) ** 2 + (girl.y - position[1]) ** 2) ** 0.5
                 if distance <= 30:
                     last_used_door = list(door_positions.keys())[idx]
-                    door.play_sound()  # 해당 Door 객체의 사운드 재생
-                    if last_used_door == 'door1':
-                        game_framework.change_mode(yard)
-                    elif last_used_door == 'door2':
-                        game_framework.change_mode(kitchen)
-                    elif last_used_door == 'door3':
-                        game_framework.change_mode(bedroom)
-                    elif last_used_door == 'door4':
-                        if key_required:
-                            # Key가 부착되어 있어야만 이동 가능
-                            if isinstance(girl.item, Key):
-                                key_required = False  # 이후에는 key 없이 이동 가능
-                                game_framework.change_mode(library)
-                            else:
-                                print("Key가 필요합니다!")  # Key가 없는 경우 경고 메시지 출력
+
+                    # 잠긴 문 처리
+                    if last_used_door == 'door4' and key_required:
+                        if isinstance(girl.item, Key):  # 열쇠가 있는 경우
+                            key_required = False  # 열쇠 필요 조건 해제
+                            door.play_sound()  # 문 열리는 사운드
+                            game_framework.change_mode(library)
                         else:
+                            door.play_locked_sound()  # 잠긴 문 사운드
+                            print("Key가 필요합니다!")
+                    else:  # 잠기지 않은 문 처리
+                        door.play_sound()
+                        if last_used_door == 'door1':
+                            game_framework.change_mode(yard)
+                        elif last_used_door == 'door2':
+                            game_framework.change_mode(kitchen)
+                        elif last_used_door == 'door3':
+                            game_framework.change_mode(bedroom)
+                        elif last_used_door == 'door4':
                             game_framework.change_mode(library)
         else:
             if girl:
                 girl.handle_event(event)
-
-
-
 
 
 def update():
