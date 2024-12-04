@@ -58,8 +58,9 @@ class RunRight:
         girl.action = 2
         girl.speed = RUN_SPEED_PPS
         girl.dir = 0
-        if not girl.is_running_sound_playing:  # 중복 재생 방지
-            girl.run_sound.play()  # 단순 재생
+        # 걷는 소리가 중복되지 않게 플래그로 관리
+        if not girl.is_running_sound_playing:
+            girl.run_sound.play()  # 사운드 재생
             girl.is_running_sound_playing = True
 
     @staticmethod
@@ -78,14 +79,11 @@ class RunRightUp:
         girl.action = 2
         girl.speed = RUN_SPEED_PPS
         girl.dir = math.pi / 4.0
-        if not girl.is_running_sound_playing:  # 중복 재생 방지
-            girl.run_sound.play()  # 단순 재생
-            girl.is_running_sound_playing = True
+
 
     @staticmethod
     def exit(girl, e):
-        if girl.is_running_sound_playing:  # 사운드 플래그 초기화
-            girl.is_running_sound_playing = False
+        pass
 
     @staticmethod
     def do(girl):
@@ -98,14 +96,11 @@ class RunRightDown:
         girl.action = 2
         girl.speed = RUN_SPEED_PPS
         girl.dir = -math.pi / 4.0
-        if not girl.is_running_sound_playing:  # 중복 재생 방지
-            girl.run_sound.play()  # 단순 재생
-            girl.is_running_sound_playing = True
+
 
     @staticmethod
     def exit(girl, e):
-        if girl.is_running_sound_playing:  # 사운드 플래그 초기화
-            girl.is_running_sound_playing = False
+        pass
 
     @staticmethod
     def do(girl):
@@ -118,8 +113,9 @@ class RunLeft:
         girl.action = 0
         girl.speed = RUN_SPEED_PPS
         girl.dir = math.pi
-        if not girl.is_running_sound_playing:  # 중복 재생 방지
-            girl.run_sound.play()  # 단순 재생
+        # 걷는 소리가 중복되지 않게 플래그로 관리
+        if not girl.is_running_sound_playing:
+            girl.run_sound.play()  # 사운드 재생
             girl.is_running_sound_playing = True
 
     @staticmethod
@@ -138,14 +134,11 @@ class RunLeftUp:
         girl.action = 0
         girl.speed = RUN_SPEED_PPS
         girl.dir = math.pi * 3.0 / 4.0
-        if not girl.is_running_sound_playing:  # 중복 재생 방지
-            girl.run_sound.play()  # 단순 재생
-            girl.is_running_sound_playing = True
+
 
     @staticmethod
     def exit(girl, e):
-        if girl.is_running_sound_playing:  # 사운드 플래그 초기화
-            girl.is_running_sound_playing = False
+        pass
 
     @staticmethod
     def do(girl):
@@ -158,14 +151,12 @@ class RunLeftDown:
         girl.action = 0
         girl.speed = RUN_SPEED_PPS
         girl.dir = - math.pi * 3.0 / 4.0
-        if not girl.is_running_sound_playing:  # 중복 재생 방지
-            girl.run_sound.play()  # 단순 재생
-            girl.is_running_sound_playing = True
+        # 걷는 소리가 중복되지 않게 플래그로 관리
+
 
     @staticmethod
     def exit(girl, e):
-        if girl.is_running_sound_playing:  # 사운드 플래그 초기화
-            girl.is_running_sound_playing = False
+        pass
 
     @staticmethod
     def do(girl):
@@ -178,8 +169,9 @@ class RunUp:
         girl.action = 1
         girl.speed = RUN_SPEED_PPS
         girl.dir = math.pi / 2.0
-        if not girl.is_running_sound_playing:  # 중복 재생 방지
-            girl.run_sound.play()  # 단순 재생
+        # 걷는 소리가 중복되지 않게 플래그로 관리
+        if not girl.is_running_sound_playing:
+            girl.run_sound.play()  # 사운드 재생
             girl.is_running_sound_playing = True
 
     @staticmethod
@@ -198,8 +190,9 @@ class RunDown:
         girl.action = 3
         girl.speed = RUN_SPEED_PPS
         girl.dir = - math.pi / 2.0
-        if not girl.is_running_sound_playing:  # 중복 재생 방지
-            girl.run_sound.play()  # 단순 재생
+        # 걷는 소리가 중복되지 않게 플래그로 관리
+        if not girl.is_running_sound_playing:
+            girl.run_sound.play()  # 사운드 재생
             girl.is_running_sound_playing = True
 
     @staticmethod
@@ -245,7 +238,7 @@ class Girl:
         self.dir = 0  # Initialize direction
 
         # girl1.wav 사운드 로드
-        self.run_sound = load_wav('girl1.wav')
+        self.run_sound = load_wav('girl1.mp3')
         self.run_sound.set_volume(64)  # 볼륨 설정
         self.is_running_sound_playing = False  # 중복 재생 방지 플래그
 
@@ -261,13 +254,14 @@ class Girl:
         self.x = clamp(50, self.x, 1440 - 50)
         self.y = clamp(50, self.y, 960 - 50)
 
-        # 상태가 Run일 때 사운드가 중단되지 않도록 관리
-        if isinstance(self.state_machine.cur_state,
-                      (RunRight, RunLeft, RunUp, RunDown)) and not self.is_running_sound_playing:
-            self.run_sound.play()
-            self.is_running_sound_playing = True
-        elif not isinstance(self.state_machine.cur_state, (RunRight, RunLeft, RunUp, RunDown)):
-            self.is_running_sound_playing = False
+        # Run 상태일 때만 걷는 소리 재생
+        if isinstance(self.state_machine.cur_state, (RunRight, RunLeft, RunUp, RunDown)):
+            if not self.is_running_sound_playing:
+                self.run_sound.play()
+                self.is_running_sound_playing = True
+        else:
+            if self.is_running_sound_playing:
+                self.is_running_sound_playing = False
 
     def handle_event(self, event):
         if event.type == SDL_KEYDOWN:
