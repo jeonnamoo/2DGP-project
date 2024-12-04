@@ -226,8 +226,21 @@ class Girl:
         self.y = clamp(50, self.y, 960 - 50)
 
     def handle_event(self, event):
-        # 이벤트 큐에 입력 이벤트 추가
-        self.state_machine.add_event(('INPUT', event))
+        if event.type == SDL_KEYDOWN:
+            if event.key == SDLK_SPACE:
+                print("Space key pressed")
+                # Space 키가 눌렸을 때 특정 동작 수행
+                self.state_machine.add_event(('SPACE_DOWN', event))
+            elif event.key in (SDLK_LEFT, SDLK_RIGHT, SDLK_UP, SDLK_DOWN):
+                self.state_machine.add_event(('INPUT', event))
+
+        elif event.type == SDL_KEYUP:
+            if event.key == SDLK_SPACE:
+                print("Space key released")
+                # Space 키가 해제되었을 때 동작 수행
+                self.state_machine.add_event(('SPACE_UP', event))
+            elif event.key in (SDLK_LEFT, SDLK_RIGHT, SDLK_UP, SDLK_DOWN):
+                self.state_machine.add_event(('INPUT', event))
 
     def draw(self):
         direction = self.action  # 현재 방향
