@@ -2,7 +2,7 @@ import math
 
 
 from pico2d import get_time, load_image, SDL_KEYDOWN, SDL_KEYUP, SDLK_SPACE, SDLK_LEFT, SDLK_RIGHT, SDLK_UP, SDLK_DOWN, \
-    clamp
+    clamp, load_wav
 
 import game_framework
 from state_machine import *
@@ -58,10 +58,14 @@ class RunRight:
         girl.action = 2
         girl.speed = RUN_SPEED_PPS
         girl.dir = 0
+        if not girl.is_running_sound_playing:  # 중복 재생 방지
+            girl.run_sound.play()  # 단순 재생
+            girl.is_running_sound_playing = True
 
     @staticmethod
     def exit(girl, e):
-        pass
+        if girl.is_running_sound_playing:  # 사운드 플래그 초기화
+            girl.is_running_sound_playing = False
 
     @staticmethod
     def do(girl):
@@ -74,10 +78,14 @@ class RunRightUp:
         girl.action = 2
         girl.speed = RUN_SPEED_PPS
         girl.dir = math.pi / 4.0
+        if not girl.is_running_sound_playing:  # 중복 재생 방지
+            girl.run_sound.play()  # 단순 재생
+            girl.is_running_sound_playing = True
 
     @staticmethod
     def exit(girl, e):
-        pass
+        if girl.is_running_sound_playing:  # 사운드 플래그 초기화
+            girl.is_running_sound_playing = False
 
     @staticmethod
     def do(girl):
@@ -90,10 +98,14 @@ class RunRightDown:
         girl.action = 2
         girl.speed = RUN_SPEED_PPS
         girl.dir = -math.pi / 4.0
+        if not girl.is_running_sound_playing:  # 중복 재생 방지
+            girl.run_sound.play()  # 단순 재생
+            girl.is_running_sound_playing = True
 
     @staticmethod
     def exit(girl, e):
-        pass
+        if girl.is_running_sound_playing:  # 사운드 플래그 초기화
+            girl.is_running_sound_playing = False
 
     @staticmethod
     def do(girl):
@@ -106,10 +118,14 @@ class RunLeft:
         girl.action = 0
         girl.speed = RUN_SPEED_PPS
         girl.dir = math.pi
+        if not girl.is_running_sound_playing:  # 중복 재생 방지
+            girl.run_sound.play()  # 단순 재생
+            girl.is_running_sound_playing = True
 
     @staticmethod
     def exit(girl, e):
-        pass
+        if girl.is_running_sound_playing:  # 사운드 플래그 초기화
+            girl.is_running_sound_playing = False
 
     @staticmethod
     def do(girl):
@@ -122,10 +138,14 @@ class RunLeftUp:
         girl.action = 0
         girl.speed = RUN_SPEED_PPS
         girl.dir = math.pi * 3.0 / 4.0
+        if not girl.is_running_sound_playing:  # 중복 재생 방지
+            girl.run_sound.play()  # 단순 재생
+            girl.is_running_sound_playing = True
 
     @staticmethod
     def exit(girl, e):
-        pass
+        if girl.is_running_sound_playing:  # 사운드 플래그 초기화
+            girl.is_running_sound_playing = False
 
     @staticmethod
     def do(girl):
@@ -138,10 +158,14 @@ class RunLeftDown:
         girl.action = 0
         girl.speed = RUN_SPEED_PPS
         girl.dir = - math.pi * 3.0 / 4.0
+        if not girl.is_running_sound_playing:  # 중복 재생 방지
+            girl.run_sound.play()  # 단순 재생
+            girl.is_running_sound_playing = True
 
     @staticmethod
     def exit(girl, e):
-        pass
+        if girl.is_running_sound_playing:  # 사운드 플래그 초기화
+            girl.is_running_sound_playing = False
 
     @staticmethod
     def do(girl):
@@ -154,10 +178,14 @@ class RunUp:
         girl.action = 1
         girl.speed = RUN_SPEED_PPS
         girl.dir = math.pi / 2.0
+        if not girl.is_running_sound_playing:  # 중복 재생 방지
+            girl.run_sound.play()  # 단순 재생
+            girl.is_running_sound_playing = True
 
     @staticmethod
     def exit(girl, e):
-        pass
+        if girl.is_running_sound_playing:  # 사운드 플래그 초기화
+            girl.is_running_sound_playing = False
 
     @staticmethod
     def do(girl):
@@ -170,11 +198,14 @@ class RunDown:
         girl.action = 3
         girl.speed = RUN_SPEED_PPS
         girl.dir = - math.pi / 2.0
-        pass
+        if not girl.is_running_sound_playing:  # 중복 재생 방지
+            girl.run_sound.play()  # 단순 재생
+            girl.is_running_sound_playing = True
 
     @staticmethod
     def exit(girl, e):
-        pass
+        if girl.is_running_sound_playing:  # 사운드 플래그 초기화
+            girl.is_running_sound_playing = False
 
     @staticmethod
     def do(girl):
@@ -213,6 +244,11 @@ class Girl:
         self.item = None  # 현재 부착된 아이템
         self.dir = 0  # Initialize direction
 
+        # girl1.wav 사운드 로드
+        self.run_sound = load_wav('girl1.wav')
+        self.run_sound.set_volume(64)  # 볼륨 설정
+        self.is_running_sound_playing = False  # 중복 재생 방지 플래그
+
     def update(self):
         self.state_machine.update()
         # 애니메이션 프레임 업데이트
@@ -224,6 +260,14 @@ class Girl:
         # 이동 경계 제한
         self.x = clamp(50, self.x, 1440 - 50)
         self.y = clamp(50, self.y, 960 - 50)
+
+        # 상태가 Run일 때 사운드가 중단되지 않도록 관리
+        if isinstance(self.state_machine.cur_state,
+                      (RunRight, RunLeft, RunUp, RunDown)) and not self.is_running_sound_playing:
+            self.run_sound.play()
+            self.is_running_sound_playing = True
+        elif not isinstance(self.state_machine.cur_state, (RunRight, RunLeft, RunUp, RunDown)):
+            self.is_running_sound_playing = False
 
     def handle_event(self, event):
         if event.type == SDL_KEYDOWN:
