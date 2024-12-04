@@ -3,12 +3,16 @@ from pico2d import *
 class Web:
     image = None
     dust_image = None
+    sound = None
 
     def __init__(self, x, y, width=40, height=50, scale=3):
         if Web.image is None:
             Web.image = load_image('web.png')  # Web 이미지 로드
         if Web.dust_image is None:
             Web.dust_image = load_image('dust.png')  # Dust 애니메이션 이미지 로드
+        if Web.sound is None:
+            Web.sound = load_wav('duster1.mp3')  # Duster 사운드 로드
+            Web.sound.set_volume(64)  # 볼륨 설정 (0~128)
 
         self.x, self.y = x, y
         self.width, self.height = width * scale, height * scale
@@ -20,11 +24,13 @@ class Web:
         self.dust_frame_delay = 1.0  # 프레임 간 지연 시간 (초)
 
     def activate_dust(self):
-        """Dust 애니메이션을 활성화"""
+        """Dust 애니메이션을 활성화하고 사운드를 재생"""
         if not self.dust_active and not self.removed:
             self.dust_active = True
             self.dust_frame = 0
             self.dust_timer = 0
+            Web.sound.play()  # 사운드 재생
+
 
     def update(self):
         """Dust 애니메이션 업데이트"""
