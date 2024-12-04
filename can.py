@@ -4,13 +4,16 @@ class Can:
 
     image = None
     trash_image  = None
+    sound = None
 
     def __init__(self, x, y, width=40, height=50, scale=2):
         if Can.image is None:
             Can.image = load_image('can.png')  # Can 이미지 로드
         if Can.trash_image is None:
             Can.trash_image = load_image('trash.png')  # Trash 애니메이션 이미지 로드
-
+        if Can.sound is None:
+            Can.sound = load_wav('broom1.mp3')  # Stain 사운드 로드
+            Can.sound.set_volume(64)  # 볼륨 설정 (0~128)
         self.x, self.y = x, y
         self.width, self.height = width * scale, height * scale
         self.removed = False  # Can이 삭제되었는지 여부
@@ -26,6 +29,7 @@ class Can:
             self.trash_active = True
             self.trash_frame = 0
             self.trash_timer = 0
+            Can.sound.play()  # 사운드 재생
 
     def update(self):
         """Trash 애니메이션 업데이트"""
