@@ -1,0 +1,46 @@
+# pyinstaller 로 exe 를 build 하기 위한 설정
+
+# 1. 메인 파일 이름을 지정하세요.
+main_file = 'main.py'
+
+# 2. 데이타 파일들을 지정하세요.
+data_files = [
+    'animation_sheet1.png',
+    'basement.png',
+    'bedroom.png',
+    'broom.png',
+    'broom1.mp3',
+    'can.png',
+    'circle_mask.png',
+    'door.png',
+    'door1.mp3',
+    'door2.mp3',
+    'dust.png',
+    'duster.png',
+    'duster1.mp3',
+    'gage.png',
+    'gage_bar4.png',
+    'game_clear.png',
+    'girl1.mp3',
+    'key.png',
+    'kitchen.png',
+    'library.png',
+    'livingroom.png',
+    'load_screen.png',
+    'main.exe',
+    'main_screen.png',
+    'mop.png',
+    'mop1.wav',
+    'stain.png',
+    'trash.png',
+    'water.png',
+    'web.png',
+    'yard.png'
+
+
+]
+
+# 3. 데이타가 들어있는 폴더들을 지정하세요.
+data_folders = [
+]
+
